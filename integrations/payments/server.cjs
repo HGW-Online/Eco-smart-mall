@@ -13,6 +13,7 @@ const amounts=Object.freeze({education:10000,food:12500,energy:15000}); // SEK Ã
 app.use((req,res,next)=>{res.setHeader("Cache-Control","no-store");res.setHeader("X-Content-Type-Options","nosniff");next()});
 app.get("/health",(_,res)=>res.json({sandbox:true,stripeConfigured:!!stripe,adyenConfigured:isAdyenTest&&enabled,livePayments:false}));
 app.use(express.json({limit:"10kb"}));
+app.use(["/checkout","/refunds","/webhooks"],(req,res,next)=>{const secret=process.env.HGW_SANDBOX_ACCESS_TOKEN||"";const provided=req.get("X-HGW-Sandbox-Token")||"";if(secret.length<32||provided.length!==secret.length||!crypto.timingSafeEqual(Buffer.from(provided),Buffer.from(secret)))return res.status(403).json({error:"Sandbox access denied"});next()});
 function error(res,code,msg){return res.status(code).json({error:msg})}
 function validateOrder(req,res){const item=req.body?.item;if(typeof item!=="string"||!Object.hasOwn(amounts,item)){error(res,400,"Unknown demo item");return null}return{item,amount:amounts[item]}}
 app.post("/checkout/stripe",async(req,res)=>{
