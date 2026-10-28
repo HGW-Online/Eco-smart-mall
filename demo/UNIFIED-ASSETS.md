@@ -15,7 +15,7 @@ Open `demo/unified-assets.html` locally in a browser. Standalone, no packages, A
 
 ## Acceptance checks
 1. Open page and switch Arabic/English; verify text direction.
-2. Initial HVU total: 5,450 (U 1,500 + G 200 + E 1,000 + S 1,500 + GS 1,000 + SS 250).
+2. Initial HVU total: 5,700 (U 1,500 + G 200 + E 1,000 + S 1,500 + GS 1,000 + SS 500).
 3. Transfer 10 HGW-U from Arbitrum to Solana; Arbitrum quantity decreases from 1,250 to 1,240; Solana increases from 250 to 260. Total HVU unchanged.
 4. Transfer to same chain rejected.
 5. Transfer negative, zero, NaN, or greater than available balance rejected.
