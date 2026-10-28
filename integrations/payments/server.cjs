@@ -26,14 +26,7 @@ app.post("/checkout/adyen",async(req,res)=>{
  const order=validateOrder(req,res);if(!order)return;
  try{const response=await fetch(adyenBase+"/paymentLinks",{method:"POST",headers:{"Content-Type":"application/json","X-API-Key":adyenKey,"Idempotency-Key":crypto.randomUUID()},body:JSON.stringify({merchantAccount:adyenMerchant,reference:"HGW-TEST-"+crypto.randomUUID(),amount:{currency:"SEK",value:order.amount},returnUrl:origin+"/checkout-sandbox.html?payment=return",countryCode:"SE"})});if(!response.ok)return error(res,502,"Adyen test checkout unavailable");const result=await response.json();return res.json({url:result.url,mode:"test",paid:false})}catch(e){return error(res,502,"Adyen sandbox unavailable")}
 });
-app.post("/refunds/stripe",async(req,res)=>{
- return error(res,503,"Refund execution disabled pending authenticated admin and verified ledger");
- /*
- if(!stripe)return error(res,503,"Stripe sandbox account not connected");
- const id=req.body?.paymentIntentId;if(typeof id!=="string"||!/^pi_[a-zA-Z0-9]+$/.test(id))return error(res,400,"Invalid test payment reference");
- try{const intent=await stripe.paymentIntents.retrieve(id);if(intent.livemode||intent.status!=="succeeded"||intent.metadata?.demo!=="true")return error(res,403,"Not an eligible completed HGW test payment");const refund=await stripe.refunds.create({payment_intent:id},{idempotencyKey:"hgw-test-refund-"+id});return res.json({refundId:refund.id,status:refund.status,mode:"test"})}catch(e){return error(res,502,"Stripe test refund unavailable")}
-});
-*/
+app.post("/refunds/stripe",(_req,res)=>error(res,503,"Refund execution disabled pending authenticated admin and verified ledger"));
 app.post("/refunds/adyen",(_req,res)=>error(res,503,"Adyen refunds are disabled until signed webhook and verified reference ledger are implemented"));
 app.post("/webhooks/stripe",(_req,res)=>error(res,503,"Stripe webhook processing is disabled pending raw-body signature validation and durable ledger"));
 app.post("/webhooks/adyen",(_req,res)=>error(res,503,"Adyen webhook processing is disabled pending HMAC validation and durable ledger"));
