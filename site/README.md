@@ -59,3 +59,17 @@ Do not use the prototype for genuine commerce. Before any release, implement ser
 - Mobile order tables use stacked cards on narrow screens.
 - GitHub Pages is static hosting: it cannot provide secure accounts, central inventory, payment processing or authoritative order records by itself.
 - Production readiness requires a backend, authentication, server-enforced roles, database migrations, concurrency-safe inventory reservations, backups, privacy controls, monitoring and security testing. None of these are claimed as implemented.
+
+## BankID authentication — integration plan
+
+The header includes a **BankID information entry point only**. It does **not** authenticate anyone or claim to verify Swedish identities.
+
+To activate:
+1. Establish a contract with a BankID-authorized provider or relying-party integration partner, obtain test credentials and confirm production onboarding.
+2. Deploy a secure backend with BankID authentication start/status/cancel endpoints. Store any provider certificates and secrets **server-side only**. Do not put them in GitHub Pages or client-side JavaScript.
+3. Validate completed authentication **server-side** against the provider response. Use short-lived, HttpOnly, Secure, SameSite cookies for sessions, CSRF protection and rate limits; never trust a client-supplied identity or role.
+4. Map the verified identity to a user account, then enforce owner/staff/vendor/shopper permissions on every server request. BankID proves identity, not organizational authorization.
+5. Define GDPR retention, lawful basis, audit logs, account recovery, privacy notice and handling of personal identity numbers before production.
+6. Test with provider sandbox credentials, accessibility/mobile handoff, timeout, cancellation, replay prevention and negative authorization tests.
+
+**Do not ask for a personal identity number or BankID security code on this static site.** GitHub Pages cannot securely host the required backend.
