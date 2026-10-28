@@ -1,6 +1,6 @@
 # Eco Smart Mall — Bilingual Web Prototype
 
-**Status:** Demo prototype. The code is committed to a **private** repository. It is not live/hosted unless separately deployed.
+**Status:** Demo prototype. The repository is public and the demo is deployed via GitHub Pages. This remains a non-production prototype.
 
 ## Website
 
@@ -51,3 +51,11 @@ node --test tests/*.test.cjs
 - Real governance voting or legal entity registry
 
 Do not use the prototype for genuine commerce. Before any release, implement server-side auth, role separation, input validation, atomic stock reservation with inventory event logs, security/privacy review, and payment/legal compliance.
+
+## Current deployment and development
+
+- Public demo: https://sameelrefaey357-a11y.github.io/Eco-smart-mall/
+- `main` publishes the GitHub Pages site; `development` holds changes until reviewed and merged.
+- Mobile order tables use stacked cards on narrow screens.
+- GitHub Pages is static hosting: it cannot provide secure accounts, central inventory, payment processing or authoritative order records by itself.
+- Production readiness requires a backend, authentication, server-enforced roles, database migrations, concurrency-safe inventory reservations, backups, privacy controls, monitoring and security testing. None of these are claimed as implemented.
