@@ -43,6 +43,12 @@
 10. Missing data and sign-off gates
 11. Official regulatory sources
 
+
+## Project-approved sector and aggregate financial planning update (28 October 2026)
+The project owner has specified nine target sectors: food, energy, telecommunications, transport, investment, education, health, innovation and welfare. These are **proposed future service sectors**, not proof that any provider, eligible issuer, operating service or entitlement exists. In particular, investment products must remain separate from HGW-U utility entitlements.
+
+The project has set **USD 1,000,000,000 as a combined programme planning target for tokens and financial instruments**. This is not an actual asset valuation, issued nominal amount, issuer capital, token capitalisation, backed reserves, money raised, fixed redemption value or a promise that holders will share an equal price. Neither distribution among sectors nor allocation among instruments is fixed. The programme includes legally distinct issuer- and instrument-specific rights and must not double count asset values and tokens representing claims on them. Full decisions are in [HGW-SECTORS-AND-USD1B-PROGRAMME-BASELINE.md](HGW-SECTORS-AND-USD1B-PROGRAMME-BASELINE.md).
+
 ## 1. Responsible parties and project — MiCA Annex I
 HGW is a proposed network for commerce, cooperative digital services, and planned energy, manufacturing, education and health services. The existing Eco-smart-mall codebase is a **demonstrator**. No operational capacity or service availability beyond validated deployed functionality is represented by this draft.
 
