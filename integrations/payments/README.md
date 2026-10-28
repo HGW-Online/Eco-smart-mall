@@ -13,3 +13,6 @@ Endpoints:
 **DO NOT deploy this backend to a public origin as-is.** Production work requires an authenticated admin, CSRF/rate limits, durable order DB, verified Stripe signature using raw request body, Adyen HMAC webhook verification, payment status reconciliation, checkout session order ownership, refund authorization, 2-person approval, test account ownership verification and audit. A browser return URL is never proof of settlement. A Stripe account observed in connector session is in LIVEMODE and not verified as the HGW merchant, so no account operations were run.
 
 Adyen and Stripe do not implicitly activate every global wallet. Availability depends on agreement and merchant geography. No real identity, receipt, refund, bank settlement or KYC test was run.
+
+### API access gate
+All POST checkout, refund and webhook paths require a private minimum 32-character `HGW_SANDBOX_ACCESS_TOKEN` passed in the `X-HGW-Sandbox-Token` header; missing or incorrect tokens receive 403. This temporary gate is NOT a replacement for proper payment administration authentication, durable records, webhook signatures and endpoint-specific permissions. Do not embed the token in public frontend code. For genuine provider callbacks, implement a separately secured raw-body signature verified route instead of this gated placeholder.
