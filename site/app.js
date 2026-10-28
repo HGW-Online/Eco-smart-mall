@@ -109,6 +109,18 @@
   }
   function dialog(title,content){$('dialogTitle').textContent=title;$('dialogContent').innerHTML=content;$('dialog').classList.remove('hidden');$('closeDialog').focus();}
   function closeDialog(){$('dialog').classList.add('hidden');$('cartBtn').focus();}
+  function showBankIdInfo(){
+    dialog(T('تسجيل الدخول باستخدام BankID','Sign in with BankID'),
+      '<p>'+T('سيكون BankID وسيلة تسجيل الدخول الأساسية للحسابات السويدية. الربط الحقيقي غير مفعل بعد.','BankID is planned as the primary sign-in method for Swedish accounts. Live authentication is not configured yet.')+'</p>'+
+      '<div class="auth-info"><strong>'+T('غير متصل بخدمة BankID','Not connected to BankID')+'</strong><p>'+T('لن نطلب منك الرقم الشخصي أو كلمة مرور أو رمز أمان داخل هذا النموذج. لا يمكن فتح جلسة مستخدم أو صلاحيات إدارة من هذه الصفحة.','This demo never asks for a personal identity number, password or security code. This page cannot create a user session or grant administrative access.')+'</p></div>'+
+      '<p class="muted">'+T('يتطلب التفعيل جهة تعاقد مع مزود BankID معتمدًا، وخادمًا آمنًا للتحقق، وجلسات وصلاحيات على الخادم.','Activation requires an authorized BankID integration provider, a secure server-side verification flow, and server-enforced sessions and permissions.')+'</p>');
+  }
+  function showEuropeanEidInfo(){
+    dialog(T('الهوية الإلكترونية الأوروبية','European electronic identity'),
+      '<p>'+T('سيتيح HGW مستقبلًا تسجيل الدخول عبر وسائل الهوية الإلكترونية الوطنية الأوروبية المعترف بها ضمن إطار eIDAS، ومع المحافظ الأوروبية للهوية الرقمية (EUDI Wallet) عندما تتاح تكاملات موثوقة.','HGW plans to support recognized national European electronic identity schemes under eIDAS and European Digital Identity Wallet (EUDI Wallet) integrations when supported by trusted providers.')+'</p>'+
+      '<div class="auth-info"><strong>'+T('التحقق الأوروبي غير مفعّل بعد','European eID verification is not active')+'</strong><p>'+T('هذه واجهة معلومات فقط. لا ترسل رقم هوية أو بيانات شخصية هنا. لا يتم إنشاء جلسة دخول أو منح صلاحيات.','This is an information-only interface. Do not enter an identity number or personal data here. No session is created and no permissions are granted.')+'</p></div>'+
+      '<p class="muted">'+T('التفعيل يتطلب وسيط هوية متوافقًا مع eIDAS، وخادمًا يتحقق من النتيجة والتوقيعات والجهة المصدرة، مع سياسات خصوصية وصلاحيات منفصلة.','Activation requires an eIDAS-compatible identity integration, server-side validation of the result, signatures and issuer, plus privacy and separate authorization policies.')+'</p>');
+  }
   function showCart(){
     const lines=db.cart.map(i=>{const p=product(i.id);return '<div class="cart-row"><div><strong>'+safe(T(p.ar,p.name))+'</strong><br><small>'+currency(p.price)+' × '+i.qty+'</small></div><div class="actions">'+button('minus','−',i.id,'btn-outline small')+button('plus','+',i.id,'btn-outline small',i.qty>=p.stock)+button('remove','✕',i.id,'btn-outline small')+'</div></div>';}).join('');
     const sum=db.cart.reduce((s,i)=>s+product(i.id).price*i.qty,0);
@@ -147,6 +159,8 @@
   }
   document.addEventListener('click',e=>{
     const b=e.target.closest('button');if(!b)return;
+    if(b.id==='euEidLogin'){showEuropeanEidInfo();return;}
+    if(b.id==='bankidLogin'){showBankIdInfo();return;}
     if(b.id==='lang'){lang=lang==='ar'?'en':'ar';render();return;}
     if(b.id==='cartBtn'){showCart();return;}
     if(b.id==='closeDialog'){closeDialog();return;}

@@ -27,3 +27,18 @@
   .orders-table td .actions{justify-content:flex-end}
 }
 @media(max-width:390px){.brand small{display:none}.brandmark{font-size:1.5rem}.brand{font-size:.72rem}}
+
+/* BankID readiness notice (not an authenticated session). */
+.auth-info{border:1px solid #e9d7a8;background:#fff6dc;color:#694e16;padding:14px;border-radius:12px;margin:14px 0}
+.auth-info p{margin:8px 0 0}
+@media(max-width:390px){.header-actions{gap:4px}.header-actions .light-btn{padding:7px 5px;font-size:.85rem}}
+
+/* Keep four header actions usable on narrow mobile displays. */
+@media(max-width:480px){
+  .topbar{padding-inline:8px;gap:4px}
+  .header-actions{gap:3px}
+  .header-actions .light-btn{padding:7px 5px;font-size:.75rem;white-space:nowrap}
+  .brand{font-size:.68rem;gap:4px;letter-spacing:0}
+  .brandmark{font-size:1.2rem}
+  .brand small{display:none}
+}
