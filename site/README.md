@@ -73,3 +73,16 @@ To activate:
 6. Test with provider sandbox credentials, accessibility/mobile handoff, timeout, cancellation, replay prevention and negative authorization tests.
 
 **Do not ask for a personal identity number or BankID security code on this static site.** GitHub Pages cannot securely host the required backend.
+
+## European electronic identity — eIDAS / EUDI Wallet plan
+
+The **EU eID** button is an information-only entry point, not a functioning identity verification service. European eID is not one universal credential: different countries operate recognized national electronic identity schemes, and EUDI Wallet is an emerging cross-border wallet framework. Availability and relying-party onboarding vary by country and provider.
+
+Implementation prerequisites:
+1. Select an eIDAS-compatible identity broker or trusted integration and verify supported notified national eID schemes, assurance levels and EUDI Wallet compatibility.
+2. Implement a secure server-side redirect/response flow using the integration's supported protocols; verify signatures, issuer, audience, state/nonce, expiration and replay protection.
+3. Request only essential identity attributes, provide privacy notices and appropriate GDPR controls. Never store identity documents, private keys, or credentials in client-side code.
+4. Map verified identities to accounts without assuming that an EU eID grants HGW roles; authorization must be server-side.
+5. Test supported countries and wallet handoff, errors, cancellations, session expiration and account linking in a provider sandbox before production.
+
+BankID and EU eID may share an account system, but each provider must be validated independently. Neither is live in this GitHub Pages demo.
