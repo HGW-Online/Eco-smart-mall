@@ -1,0 +1,12 @@
+{
+  "name": "hgw-payments-test-adapters",
+  "private": true,
+  "scripts": {
+    "test": "node --test test.cjs",
+    "start": "node server.cjs"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "stripe": "^19.0.0"
+  }
+}
