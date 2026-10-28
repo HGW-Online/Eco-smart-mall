@@ -8,7 +8,7 @@ const html=fs.readFileSync('demo/unified-assets.html','utf8');
 const script=html.match(/<script>([\s\S]*?)<\/script>/);
 assert.ok(script,'expected standalone inline demo script');
 function boot(){
-  const sandbox={console,structuredClone,Number,Math,Set,Object,Array};
+  const sandbox={console,structuredClone,Number,Math,Set,Object,Array,window:{}};
   const dom=new Map();
   function el(id){if(!dom.has(id))dom.set(id,{value:'',textContent:'',innerHTML:'',classList:{toggle(){}},options:[],style:{}});return dom.get(id)}
   sandbox.document={documentElement:{},getElementById:el,querySelectorAll:()=>[]};
