@@ -16,3 +16,6 @@ Adyen and Stripe do not implicitly activate every global wallet. Availability de
 
 ### API access gate
 All POST checkout, refund and webhook paths require a private minimum 32-character `HGW_SANDBOX_ACCESS_TOKEN` passed in the `X-HGW-Sandbox-Token` header; missing or incorrect tokens receive 403. This temporary gate is NOT a replacement for proper payment administration authentication, durable records, webhook signatures and endpoint-specific permissions. Do not embed the token in public frontend code. For genuine provider callbacks, implement a separately secured raw-body signature verified route instead of this gated placeholder.
+
+## Integration disposition
+This backend lives under `integrations/payments/` after merge and is **not served by static GitHub Pages**. It is not a public checkout API until server hosting, private test credentials, signed callbacks, authorization and an order ledger have been implemented. Refund endpoint fails closed (503) even with a sandbox access token. No production flags or real-money charge routes are enabled.
