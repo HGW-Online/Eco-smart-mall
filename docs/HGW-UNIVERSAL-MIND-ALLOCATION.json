@@ -1,0 +1,67 @@
+{
+  "currency": "USD",
+  "status": "proposed_unfunded_allocation",
+  "programme_envelope_scenario": 300000000,
+  "sector_request": 22000000,
+  "items": [
+    {
+      "id": "ai_models",
+      "label_ar": "الذكاء الاصطناعي والنماذج",
+      "label_en": "AI & models",
+      "amount": 5000000,
+      "shared_cost_review": "pending"
+    },
+    {
+      "id": "simulation",
+      "label_ar": "المحاكاة والتوأمة الرقمية",
+      "label_en": "Simulation & twins",
+      "amount": 4000000,
+      "shared_cost_review": "pending"
+    },
+    {
+      "id": "compute",
+      "label_ar": "البنية التحتية والحوسبة",
+      "label_en": "Infrastructure & computing",
+      "amount": 4000000,
+      "shared_cost_review": "pending"
+    },
+    {
+      "id": "knowledge",
+      "label_ar": "شبكات البيانات والمعرفة",
+      "label_en": "Knowledge & data networks",
+      "amount": 2500000,
+      "shared_cost_review": "pending"
+    },
+    {
+      "id": "security",
+      "label_ar": "الأمن السيبراني والحوكمة",
+      "label_en": "Security & governance",
+      "amount": 1500000,
+      "shared_cost_review": "pending"
+    },
+    {
+      "id": "research",
+      "label_ar": "البحث والشراكات",
+      "label_en": "Research & partnerships",
+      "amount": 2000000,
+      "shared_cost_review": "pending"
+    },
+    {
+      "id": "operations",
+      "label_ar": "الإدارة والتراخيص والتشغيل",
+      "label_en": "Administration, licensing & operations",
+      "amount": 1500000,
+      "shared_cost_review": "pending"
+    },
+    {
+      "id": "contingency",
+      "label_ar": "احتياطي المخاطر والطوارئ",
+      "label_en": "Risk & contingency reserve",
+      "amount": 1500000,
+      "shared_cost_review": "pending"
+    }
+  ],
+  "unallocated_before_other_sector_requests": 278000000,
+  "other_sector_allocations_reconciled": false,
+  "shared_cost_deductions_confirmed": false
+}

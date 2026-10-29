@@ -1,0 +1,38 @@
+{
+  "name": "hgw-platform-apps",
+  "version": "0.1.0",
+  "private": true,
+  "description": "HGW native packaging scaffold — release builds pending",
+  "main": "desktop/main.cjs",
+  "scripts": {
+    "web:prepare": "node prepare-web.cjs",
+    "mobile:init:android": "npm run web:prepare && cap add android",
+    "mobile:init:ios": "npm run web:prepare && cap add ios",
+    "mobile:sync": "npm run web:prepare && cap sync",
+    "mobile:android": "cap open android",
+    "mobile:ios": "cap open ios",
+    "desktop:dev": "npm run web:prepare && electron .",
+    "desktop:windows": "npm run web:prepare && electron-builder --win --publish never",
+    "desktop:mac": "npm run web:prepare && electron-builder --mac --publish never",
+    "desktop:linux": "npm run web:prepare && electron-builder --linux --publish never"
+  },
+  "dependencies": {
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/ios": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.0.0",
+    "electron": "^39.0.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "org.hgw.global",
+    "productName": "HGW Global",
+    "directories": {"output": "releases"},
+    "files": ["desktop/**", "www/**", "package.json"],
+    "win": {"target": ["nsis"]},
+    "mac": {"target": ["dmg"], "category": "public.app-category.business"},
+    "linux": {"target": ["AppImage", "deb"], "category": "Office"}
+  }
+}
