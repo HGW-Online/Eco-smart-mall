@@ -48,6 +48,7 @@
     ['research','⚗','الدراسات والبحث والمعرفة','Research & knowledge'],
     ['cyber','🔐','أمن المعلومات والتشفير','Cybersecurity & encryption'],
     ['devices','⊞','التطبيق والأجهزة','App & devices'],
+    ['resources','◉','تبادل الخامات والموارد','Materials & resources exchange'],
     ['orders','▤','الطلبات','Orders'],
     ['inventory','▦','المخزون','Inventory'],
     ['members','♙','الأعضاء','Members'],
@@ -73,7 +74,7 @@
     $('notice').textContent='⚠ '+T('موقع تجريبي فقط، لا يتصل بـ Glide أو خدمات دفع. البيانات المحلية ليست سجلاً تجارياً.','Prototype only; no Glide or payment connection. Local data is not a commercial ledger.');
     $('cartCount').textContent=db.cart.reduce((s,i)=>s+i.qty,0);
     $('nav').innerHTML=navItems.map(([id,icon,ar,en])=>'<button type="button" data-page="'+id+'" class="'+(id===page?'current':'')+'" aria-current="'+(id===page?'page':'false')+'">'+icon+' &nbsp;'+T(ar,en)+'</button>').join('');
-    const views={home,shop,orders,inventory,members,vendors,governance,transparency,
+    const views={resources:()=>HGWResources.render(lang),home,shop,orders,inventory,members,vendors,governance,transparency,
       cognitive:()=>HGW.render('cognitive',lang),communications:()=>HGW.render('communications',lang),quality:()=>HGW.render('quality',lang),research:()=>HGW.render('research',lang),cyber:()=>HGW.render('cyber',lang),insurance:()=>HGW.render('insurance',lang),circular:()=>HGW.render('circular',lang),
       logistics:()=>HGW.render('logistics',lang),devices:()=>HGW.render('devices',lang)};
     $('view').innerHTML=(views[page]||home)();

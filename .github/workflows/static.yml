@@ -38,6 +38,8 @@ jobs:
         run: |
           node --check site/app.js
           node --check site/hgw.js
+          node --check site/resources-data.js
+          node --check site/resources.js
           node --check site/pwa.js
           node --check site/sw.js
           node --test tests/*.test.cjs
