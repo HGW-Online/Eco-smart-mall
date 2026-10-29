@@ -34,12 +34,12 @@ test('integrated app navigation renders every sector and language',()=>{
  const element=id=>{if(!elements.has(id))elements.set(id,{id,textContent:'',innerHTML:'',addEventListener(){},classList:{contains(){return true;},add(){},remove(){}}});return elements.get(id);};
  const document={documentElement:{},getElementById:element,querySelector:()=>element('demo'),addEventListener(type,fn){(listeners[type]??=[]).push(fn);}};
  const window={document,scrollTo(){}};const ctx={window,document,Intl,console,localStorage:{getItem(){return null;},setItem(){}},setTimeout};
- for(const file of ['resources-data.js','resources.js','abundance.js','recovery.js','hgw.js','app.js']){vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../site',file),'utf8'),ctx);if(file==='hgw.js')ctx.HGW=window.HGW;if(file==='resources.js')ctx.HGWResources=window.HGWResources;if(file==='abundance.js')ctx.HGWAbundance=window.HGWAbundance;if(file==='recovery.js')ctx.HGWRecovery=window.HGWRecovery;}
+ for(const file of ['resources-data.js','resources.js','abundance.js','recovery.js','encyclopedia.js','hgw.js','app.js']){vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../site',file),'utf8'),ctx);if(file==='hgw.js')ctx.HGW=window.HGW;if(file==='resources.js')ctx.HGWResources=window.HGWResources;if(file==='abundance.js')ctx.HGWAbundance=window.HGWAbundance;if(file==='recovery.js')ctx.HGWRecovery=window.HGWRecovery;if(file==='encyclopedia.js')ctx.HGWEncyclopedia=window.HGWEncyclopedia;}
  const click=button=>{for(const fn of listeners.click||[])fn({target:{closest:()=>button}});};
  for(let language=0;language<2;language++){
-  for(const page of ['allprojects','home','recovery','resources','abundance','insurance','circular','logistics','cyber','research','quality','communications','cognitive','devices']){
+  for(const page of ['allprojects','encyclopedia','home','recovery','resources','abundance','insurance','circular','logistics','cyber','research','quality','communications','cognitive','devices']){
    click({dataset:{page}});assert.match(element('view').innerHTML,/<h1>/);assert.doesNotMatch(element('view').innerHTML,/undefined/);
-   if(page==='allprojects'){const html=element('view').innerHTML;for(const id of ['insurance','circular','resources','logistics','cyber','research','quality','communications','cognitive','abundance','recovery','devices'])assert.ok(html.includes('id="project-'+id+'"'));const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);assert.equal(new Set(ids).size,ids.length,'Unified page must have unique control/anchor IDs');}
+   if(page==='allprojects'){const html=element('view').innerHTML;for(const id of ['encyclopedia','insurance','circular','resources','logistics','cyber','research','quality','communications','cognitive','abundance','recovery','devices'])assert.ok(html.includes('id="project-'+id+'"'));const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);assert.equal(new Set(ids).size,ids.length,'Unified page must have unique control/anchor IDs');}
   }
   click({id:'lang',dataset:{}});
  }

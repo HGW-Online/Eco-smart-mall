@@ -42,6 +42,7 @@ jobs:
           node --check site/resources.js
           node --check site/abundance.js
           node --check site/recovery.js
+          node --check site/encyclopedia.js
           node --check site/pwa.js
           node --check site/sw.js
           node --test tests/*.test.cjs

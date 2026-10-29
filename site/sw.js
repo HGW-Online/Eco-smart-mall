@@ -1,6 +1,6 @@
 'use strict';
-const CACHE='hgw-shell-v11';
-const SHELL=['./','./index.html','./styles.css','./app.js','./hgw.js','./resources.js','./resources-data.js','./abundance.js','./abundance-plan.html','./recovery.js','./recovery-plan.html','./pwa.js','./manifest.webmanifest','./cybersecurity-plan.html','./research-plan.html','./research-proposal.html','./quality-plan.html','./quality-proposal.html','./communications-plan.html','./communications-proposal.html','./cognitive-proposal.html','./cognitive-plan.html','./universal-mind-proposal.html','./icons/app-192.png','./icons/app-512.png'];
+const CACHE='hgw-shell-v12';
+const SHELL=['./','./index.html','./styles.css','./app.js','./hgw.js','./resources.js','./resources-data.js','./abundance.js','./abundance-plan.html','./recovery.js','./recovery-plan.html','./encyclopedia.js','./encyclopedia-plan.html','./pwa.js','./manifest.webmanifest','./cybersecurity-plan.html','./research-plan.html','./research-proposal.html','./quality-plan.html','./quality-proposal.html','./communications-plan.html','./communications-proposal.html','./cognitive-proposal.html','./cognitive-plan.html','./universal-mind-proposal.html','./icons/app-192.png','./icons/app-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL))));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('hgw-shell-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
