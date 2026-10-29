@@ -29,7 +29,7 @@ test('Universal Mind allocation reconciles to the requested envelope without cla
  assert.equal(p.other_sector_allocations_reconciled,false);
  assert.equal(p.shared_cost_deductions_confirmed,false);
 });
-test('integrated app navigation renders every sector and language',()=>{
+test('grouped navigation opens each sector, project and value repository independently in both languages',()=>{
  const vm=require('node:vm');const elements=new Map();const listeners={};
  const element=id=>{if(!elements.has(id))elements.set(id,{id,textContent:'',innerHTML:'',addEventListener(){},classList:{contains(){return true;},add(){},remove(){}}});return elements.get(id);};
  const document={documentElement:{},getElementById:element,querySelector:()=>element('demo'),addEventListener(type,fn){(listeners[type]??=[]).push(fn);}};
@@ -37,9 +37,9 @@ test('integrated app navigation renders every sector and language',()=>{
  for(const file of ['resources-data.js','resources.js','abundance.js','recovery.js','encyclopedia.js','hgw.js','app.js']){vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../site',file),'utf8'),ctx);if(file==='hgw.js')ctx.HGW=window.HGW;if(file==='resources.js')ctx.HGWResources=window.HGWResources;if(file==='abundance.js')ctx.HGWAbundance=window.HGWAbundance;if(file==='recovery.js')ctx.HGWRecovery=window.HGWRecovery;if(file==='encyclopedia.js')ctx.HGWEncyclopedia=window.HGWEncyclopedia;}
  const click=button=>{for(const fn of listeners.click||[])fn({target:{closest:()=>button}});};
  for(let language=0;language<2;language++){
-  for(const page of ['allprojects','encyclopedia','home','recovery','resources','abundance','insurance','circular','logistics','cyber','research','quality','communications','cognitive','devices']){
+  for(const page of ['allprojects','encyclopedia','home','recovery','resources','abundance','insurance','circular','logistics','cyber','research','quality','communications','cognitive','devices',...['commerce','protection','knowledge','human','future','economy','governance','apps'].map(id=>'group-'+id),...ctx.HGWEncyclopedia.projects.map(p=>'project-'+p.id),...ctx.HGWAbundance.banks.map(b=>'bank-'+b.id)]){
    click({dataset:{page}});assert.match(element('view').innerHTML,/<h1>/);assert.doesNotMatch(element('view').innerHTML,/undefined/);
-   if(page==='allprojects'){const html=element('view').innerHTML;for(const id of ['encyclopedia','insurance','circular','resources','logistics','cyber','research','quality','communications','cognitive','abundance','recovery','devices'])assert.ok(html.includes('id="project-'+id+'"'));const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);assert.equal(new Set(ids).size,ids.length,'Unified page must have unique control/anchor IDs');}
+   if(page==='allprojects'){const html=element('view').innerHTML;for(const id of ['commerce','protection','knowledge','human','future','economy','governance','apps'])assert.ok(html.includes('data-page="group-'+id+'"'));assert.doesNotMatch(html,/hgw-landed|project-insurance/);}
   }
   click({id:'lang',dataset:{}});
  }
