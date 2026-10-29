@@ -36,30 +36,18 @@
   const orderValue=o=>o.items.reduce((sum,i)=>sum+(product(i.id)?.price||0)*i.qty,0);
   const shopNames=()=>[...new Set(db.products.map(p=>p.vendor))];
   const statusText=s=>({pending:T('قيد الانتظار','Pending'),confirmed:T('مؤكد','Confirmed'),fulfilled:T('تم التسليم','Fulfilled'),cancelled:T('ملغي','Cancelled')})[s]||s;
-  const navItems=[
-    ['allprojects','▥','كل المشاريع في صفحة واحدة','All projects on one page'],
-    ['home','⌂','الرئيسية','Overview'],
-    ['shop','◈','المتجر','Shop'],
-    ['insurance','🛡','التأمين والحماية','Insurance & resilience'],
-    ['circular','♻','إعادة التدوير وسوق المستعمل','Circular marketplace'],
-    ['logistics','▧','اللوجستيات والمحاكاة المالية','Logistics & financial model'],
-    ['cognitive','✧','البنية التحتية المعرفية','Cognitive infrastructure'],
-    ['communications','◎','الاتصالات والبيانات','Communications & data'],
-    ['quality','✓','الجودة والسلامة والتوأمة الرقمية','Quality, safety & digital twins'],
-    ['research','⚗','الدراسات والبحث والمعرفة','Research & knowledge'],
-    ['cyber','🔐','أمن المعلومات والتشفير','Cybersecurity & encryption'],
-    ['devices','⊞','التطبيق والأجهزة','App & devices'],
-    ['encyclopedia','▧','موسوعة المشاريع والرؤية','Project encyclopedia & vision'],
-    ['recovery','♡','الصحة النفسية والتعافي','Mental health & recovery'],
-    ['abundance','∞','اقتصاد الوفرة والدائرة المغلقة','Abundance & circular economy'],
-    ['resources','◉','تبادل الخامات والموارد','Materials & resources exchange'],
-    ['orders','▤','الطلبات','Orders'],
-    ['inventory','▦','المخزون','Inventory'],
-    ['members','♙','الأعضاء','Members'],
-    ['vendors','▣','البائعون','Vendors'],
-    ['governance','⚖','التصويت','Governance'],
-    ['transparency','◷','الشفافية','Transparency']
+  const sectionGroups=[
+    {id:'commerce',ar:'التجارة والموارد واللوجستيات',en:'Commerce, resources & logistics',items:[['home','⌂','نظرة عامة للتجارة','Commerce overview'],['shop','◈','المتجر','Shop'],['circular','♻','إعادة التدوير وسوق المستعمل','Circular marketplace'],['resources','◉','تبادل الخامات والموارد','Materials & resources'],['logistics','▧','اللوجستيات والمحاكاة المالية','Logistics & financial model'],['orders','▤','الطلبات','Orders'],['inventory','▦','المخزون','Inventory'],['members','♙','الأعضاء','Members'],['vendors','▣','البائعون','Vendors']]},
+    {id:'protection',ar:'الحماية والجودة والاتصالات',en:'Protection, quality & connectivity',items:[['insurance','🛡','التأمين والحماية','Insurance & resilience'],['cyber','🔐','أمن المعلومات والتشفير','Cybersecurity & encryption'],['quality','✓','الجودة والسلامة والتوأمة الرقمية','Quality, safety & twins'],['communications','◎','الاتصالات والبيانات','Communications & data']]},
+    {id:'knowledge',ar:'البحث والبنية المعرفية',en:'Research & knowledge infrastructure',items:[['research','⚗','الدراسات والبحث والملكية الفكرية','Research & IP'],['cognitive','✧','البنية التحتية المعرفية','Universal Mind']]},
+    {id:'human',ar:'الصحة والتعليم والتنوع',en:'Health, education & diversity',items:[['recovery','♡','الصحة النفسية والتعافي','Mental health & recovery'],...HGWEncyclopedia.projects.filter(p=>['education-se','education-fr','diversity'].includes(p.id)).map(p=>['project-'+p.id,'◇',p.ar,p.en])]},
+    {id:'future',ar:'الاستكشاف والبنية الفضائية',en:'Exploration & space infrastructure',items:HGWEncyclopedia.projects.filter(p=>p.group<=2).map(p=>['project-'+p.id,'◇',p.ar,p.en])},
+    {id:'economy',ar:'اقتصاد الوفرة وبنوك القيمة',en:'Abundance & value repositories',items:[['abundance','∞','اقتصاد الوفرة والدائرة المغلقة','Abundance & circular economy'],...HGWEncyclopedia.projects.filter(p=>p.id==='global-popular').map(p=>['project-'+p.id,'◇',p.ar,p.en]),...HGWAbundance.banks.map(p=>['bank-'+p.id,'▣',p.ar,p.en])]},
+    {id:'governance',ar:'الحوكمة والفلسفة والرؤية',en:'Governance, philosophy & vision',items:[['governance','⚖','التصويت','Governance'],['transparency','◷','الشفافية','Transparency'],...HGWEncyclopedia.projects.filter(p=>['leadership','philosophy'].includes(p.id)).map(p=>['project-'+p.id,'◇',p.ar,p.en]),['encyclopedia','▧','دليل الموسوعة والمشاريع','Project encyclopedia directory']]},
+    {id:'apps',ar:'المنصة والتطبيقات',en:'Platform & apps',items:[['devices','⊞','التطبيق والأجهزة','App & devices']]}
   ];
+  const navItems=[['allprojects','▥','دليل الأقسام','Section directory'],...sectionGroups.flatMap(g=>g.items)];
+  function navButton([id,icon,ar,en]){return '<button type="button" data-page="'+id+'" class="'+(id===page?'current':'')+'" aria-current="'+(id===page?'page':'false')+'">'+icon+' &nbsp;'+T(ar,en)+'</button>';}
   function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(db));}catch(e){notify(T('تعذر حفظ البيانات في المتصفح','Local browser storage unavailable'));}}
   function notify(msg){const n=$('notice');n.textContent='⚠ '+msg;}
   function pill(value,warning=false){return '<span class="pill'+(warning?' warn':'')+'">'+safe(value)+'</span>';}
@@ -77,31 +65,19 @@
     document.querySelector('[data-i18n=demo]').textContent=T('نسخة تجريبية','DEMO');
     $('notice').textContent='⚠ '+T('موقع تجريبي فقط، لا يتصل بـ Glide أو خدمات دفع. البيانات المحلية ليست سجلاً تجارياً.','Prototype only; no Glide or payment connection. Local data is not a commercial ledger.');
     $('cartCount').textContent=db.cart.reduce((s,i)=>s+i.qty,0);
-    $('nav').innerHTML=navItems.map(([id,icon,ar,en])=>'<button type="button" data-page="'+id+'" class="'+(id===page?'current':'')+'" aria-current="'+(id===page?'page':'false')+'">'+icon+' &nbsp;'+T(ar,en)+'</button>').join('');
+    $('nav').innerHTML=navButton(navItems[0])+sectionGroups.map(g=>'<details class="nav-group" '+(g.items.some(x=>x[0]===page)||page==='group-'+g.id?'open':'')+'><summary>'+T(g.ar,g.en)+'</summary>'+g.items.map(navButton).join('')+'</details>').join('');
     const views={allprojects,encyclopedia:()=>HGWEncyclopedia.render(lang),recovery:()=>HGWRecovery.render(lang),abundance:()=>HGWAbundance.render(lang),resources:()=>HGWResources.render(lang),home,shop,orders,inventory,members,vendors,governance,transparency,
       cognitive:()=>HGW.render('cognitive',lang),communications:()=>HGW.render('communications',lang),quality:()=>HGW.render('quality',lang),research:()=>HGW.render('research',lang),cyber:()=>HGW.render('cyber',lang),insurance:()=>HGW.render('insurance',lang),circular:()=>HGW.render('circular',lang),
       logistics:()=>HGW.render('logistics',lang),devices:()=>HGW.render('devices',lang)};
-    $('view').innerHTML=(views[page]||home)();
+    sectionGroups.forEach(g=>{views['group-'+g.id]=()=>groupDirectory(g);});
+    HGWEncyclopedia.projects.forEach(p=>{views['project-'+p.id]=()=>HGWEncyclopedia.renderProject(p.id,lang);});
+    HGWAbundance.banks.forEach(b=>{views['bank-'+b.id]=()=>HGWAbundance.renderBank(b.id,lang);});
+    const group=sectionGroups.find(g=>g.items.some(x=>x[0]===page));
+    const breadcrumb=page!=='allprojects'?'<div class="section-breadcrumb"><button class="btn-outline small" data-page="allprojects">'+T('دليل الأقسام','Section directory')+'</button>'+(group?'<button class="btn-outline small" data-page="group-'+group.id+'">'+T(group.ar,group.en)+'</button>':'')+'</div>':'';
+    $('view').innerHTML=breadcrumb+(views[page]||allprojects)();
   }
-  function allprojects(){
-    const projects=[
-      ['encyclopedia',T('المشاريع الجديدة وموسوعة الرؤية','New projects & vision encyclopedia'),()=>HGWEncyclopedia.render(lang)],
-      ['commerce',T('التجارة التعاونية','Cooperative commerce'),home],
-      ['insurance',T('التأمين والحماية','Insurance & resilience'),()=>HGW.render('insurance',lang)],
-      ['circular',T('السوق الدائري وإعادة التدوير','Circular market & recycling'),()=>HGW.render('circular',lang)],
-      ['resources',T('الخامات والموارد','Materials & resources'),()=>HGWResources.render(lang)],
-      ['logistics',T('اللوجستيات والمحاكاة المالية','Logistics & financial simulation'),()=>HGW.render('logistics',lang)],
-      ['cyber',T('الأمن والبيانات والتشفير','Cybersecurity, data & encryption'),()=>HGW.render('cyber',lang)],
-      ['research',T('البحث والمعرفة والملكية الفكرية','Research, knowledge & IP'),()=>HGW.render('research',lang)],
-      ['quality',T('الجودة والسلامة والتوائم','Quality, safety & twins'),()=>HGW.render('quality',lang)],
-      ['communications',T('الاتصالات الهجينة','Hybrid communications'),()=>HGW.render('communications',lang)],
-      ['cognitive',T('البنية المعرفية — Universal Mind','Knowledge infrastructure — Universal Mind'),()=>HGW.render('cognitive',lang)],
-      ['abundance',T('الوفرة وبنوك القيمة','Abundance & value repositories'),()=>HGWAbundance.render(lang)],
-      ['recovery',T('الصحة النفسية والتعافي','Mental health & recovery'),()=>HGWRecovery.render(lang)],
-      ['devices',T('التطبيق والأجهزة','App & devices'),()=>HGW.render('devices',lang)]
-    ];
-    return '<header id="projects-top">'+heading(T('كل مشاريع HGW في صفحة واحدة','All HGW projects on one page'),T('استعرض القطاعات المضافة ومحتواها التفاعلي من مكان واحد، أو انتقل مباشرة لأي قسم من الفهرس. الحالات والميزانيات والأهداف المقترحة موضحة داخل كل مشروع.','Explore the added sectors and interactive content together, or jump to any section from the index. Each project states its status, proposed budgets and goals.'))+'</header><nav class="panel project-index" aria-label="'+T('فهرس المشاريع','Project index')+'">'+projects.map(([id,name])=>'<a class="btn-outline small" href="#project-'+id+'">'+safe(name)+'</a>').join('')+'</nav>'+projects.map(([id,name,view])=>'<section class="unified-project" id="project-'+id+'" aria-label="'+safe(name)+'"><div class="sectionhead"><h2>'+safe(name)+'</h2><a href="#projects-top">'+T('العودة للفهرس ↑','Back to index ↑')+'</a></div>'+view()+'</section>').join('');
-  }
+  function groupDirectory(group){return heading(T(group.ar,group.en),T('اختر قسمًا فرعيًا لعرض محتواه وأدواته بصورة مستقلة.','Choose a subsection to view its content and tools separately.'))+'<div class="cards">'+group.items.map(([id,icon,ar,en])=>'<article class="card"><div class="symbol">'+icon+'</div><h2>'+safe(T(ar,en))+'</h2><button class="btn" data-page="'+id+'">'+T('افتح القسم','Open section')+'</button></article>').join('')+'</div>';}
+  function allprojects(){return heading(T('أقسام HGW ومشاريعها','HGW sections & projects'),T('الإضافات مرتبة في مجموعات وأقسام فرعية مستقلة. اختر المجموعة ثم افتح المشروع الذي تريده.','Additions are organized into groups and independent subsections. Choose a group, then open a project.'))+'<div class="cards">'+sectionGroups.map(g=>'<article class="card"><h2>'+safe(T(g.ar,g.en))+'</h2><p>'+g.items.length+' '+T('أقسام فرعية','subsections')+'</p><button class="btn" data-page="group-'+g.id+'">'+T('استعرض الأقسام','Browse sections')+'</button></article>').join('')+'</div>';}
   function home(){
     const low=db.products.filter(x=>x.stock<=3).length, pending=db.orders.filter(x=>x.status==='pending').length;
     return '<section class="hero"><div><div class="eyebrow" style="color:#d3efae">COOPERATIVE • SUSTAINABLE • TRANSPARENT</div><h1>'+T('تجارة ذكية تعود بالنفع على الجميع','Smarter commerce. Shared value.')+'</h1><p>'+T('تجربة تفاعلية لمول تعاوني متعدد البائعين، بعضوية وشفافية وحوكمة ديمقراطية.','Explore a cooperative multi-vendor mall with membership, transparent reporting and democratic participation.')+'</p>'+button('goShop',T('تصفح المتجر ←','Explore products →'),'','btn')+'</div><div class="hero-art" aria-hidden="true">🌿🏬</div></section>'+
