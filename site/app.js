@@ -30,13 +30,14 @@
     } catch(e) {}
     return deepCopy(seed);
   };
-  let db=load(),lang='ar',page='home',orderFilter='all',productQuery='';
+  let db=load(),lang='ar',page='allprojects',orderFilter='all',productQuery='';
   const T=(ar,en)=>lang==='ar'?ar:en;
   const product=id=>db.products.find(p=>p.id===id);
   const orderValue=o=>o.items.reduce((sum,i)=>sum+(product(i.id)?.price||0)*i.qty,0);
   const shopNames=()=>[...new Set(db.products.map(p=>p.vendor))];
   const statusText=s=>({pending:T('قيد الانتظار','Pending'),confirmed:T('مؤكد','Confirmed'),fulfilled:T('تم التسليم','Fulfilled'),cancelled:T('ملغي','Cancelled')})[s]||s;
   const navItems=[
+    ['allprojects','▥','كل المشاريع في صفحة واحدة','All projects on one page'],
     ['home','⌂','الرئيسية','Overview'],
     ['shop','◈','المتجر','Shop'],
     ['insurance','🛡','التأمين والحماية','Insurance & resilience'],
@@ -48,6 +49,7 @@
     ['research','⚗','الدراسات والبحث والمعرفة','Research & knowledge'],
     ['cyber','🔐','أمن المعلومات والتشفير','Cybersecurity & encryption'],
     ['devices','⊞','التطبيق والأجهزة','App & devices'],
+    ['recovery','♡','الصحة النفسية والتعافي','Mental health & recovery'],
     ['abundance','∞','اقتصاد الوفرة والدائرة المغلقة','Abundance & circular economy'],
     ['resources','◉','تبادل الخامات والموارد','Materials & resources exchange'],
     ['orders','▤','الطلبات','Orders'],
@@ -75,10 +77,28 @@
     $('notice').textContent='⚠ '+T('موقع تجريبي فقط، لا يتصل بـ Glide أو خدمات دفع. البيانات المحلية ليست سجلاً تجارياً.','Prototype only; no Glide or payment connection. Local data is not a commercial ledger.');
     $('cartCount').textContent=db.cart.reduce((s,i)=>s+i.qty,0);
     $('nav').innerHTML=navItems.map(([id,icon,ar,en])=>'<button type="button" data-page="'+id+'" class="'+(id===page?'current':'')+'" aria-current="'+(id===page?'page':'false')+'">'+icon+' &nbsp;'+T(ar,en)+'</button>').join('');
-    const views={abundance:()=>HGWAbundance.render(lang),resources:()=>HGWResources.render(lang),home,shop,orders,inventory,members,vendors,governance,transparency,
+    const views={allprojects,recovery:()=>HGWRecovery.render(lang),abundance:()=>HGWAbundance.render(lang),resources:()=>HGWResources.render(lang),home,shop,orders,inventory,members,vendors,governance,transparency,
       cognitive:()=>HGW.render('cognitive',lang),communications:()=>HGW.render('communications',lang),quality:()=>HGW.render('quality',lang),research:()=>HGW.render('research',lang),cyber:()=>HGW.render('cyber',lang),insurance:()=>HGW.render('insurance',lang),circular:()=>HGW.render('circular',lang),
       logistics:()=>HGW.render('logistics',lang),devices:()=>HGW.render('devices',lang)};
     $('view').innerHTML=(views[page]||home)();
+  }
+  function allprojects(){
+    const projects=[
+      ['commerce',T('التجارة التعاونية','Cooperative commerce'),home],
+      ['insurance',T('التأمين والحماية','Insurance & resilience'),()=>HGW.render('insurance',lang)],
+      ['circular',T('السوق الدائري وإعادة التدوير','Circular market & recycling'),()=>HGW.render('circular',lang)],
+      ['resources',T('الخامات والموارد','Materials & resources'),()=>HGWResources.render(lang)],
+      ['logistics',T('اللوجستيات والمحاكاة المالية','Logistics & financial simulation'),()=>HGW.render('logistics',lang)],
+      ['cyber',T('الأمن والبيانات والتشفير','Cybersecurity, data & encryption'),()=>HGW.render('cyber',lang)],
+      ['research',T('البحث والمعرفة والملكية الفكرية','Research, knowledge & IP'),()=>HGW.render('research',lang)],
+      ['quality',T('الجودة والسلامة والتوائم','Quality, safety & twins'),()=>HGW.render('quality',lang)],
+      ['communications',T('الاتصالات الهجينة','Hybrid communications'),()=>HGW.render('communications',lang)],
+      ['cognitive',T('البنية المعرفية — Universal Mind','Knowledge infrastructure — Universal Mind'),()=>HGW.render('cognitive',lang)],
+      ['abundance',T('الوفرة وبنوك القيمة','Abundance & value repositories'),()=>HGWAbundance.render(lang)],
+      ['recovery',T('الصحة النفسية والتعافي','Mental health & recovery'),()=>HGWRecovery.render(lang)],
+      ['devices',T('التطبيق والأجهزة','App & devices'),()=>HGW.render('devices',lang)]
+    ];
+    return '<header id="projects-top">'+heading(T('كل مشاريع HGW في صفحة واحدة','All HGW projects on one page'),T('استعرض القطاعات المضافة ومحتواها التفاعلي من مكان واحد، أو انتقل مباشرة لأي قسم من الفهرس. الحالات والميزانيات والأهداف المقترحة موضحة داخل كل مشروع.','Explore the added sectors and interactive content together, or jump to any section from the index. Each project states its status, proposed budgets and goals.'))+'</header><nav class="panel project-index" aria-label="'+T('فهرس المشاريع','Project index')+'">'+projects.map(([id,name])=>'<a class="btn-outline small" href="#project-'+id+'">'+safe(name)+'</a>').join('')+'</nav>'+projects.map(([id,name,view])=>'<section class="unified-project" id="project-'+id+'" aria-label="'+safe(name)+'"><div class="sectionhead"><h2>'+safe(name)+'</h2><a href="#projects-top">'+T('العودة للفهرس ↑','Back to index ↑')+'</a></div>'+view()+'</section>').join('');
   }
   function home(){
     const low=db.products.filter(x=>x.stock<=3).length, pending=db.orders.filter(x=>x.status==='pending').length;
