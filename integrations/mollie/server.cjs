@@ -23,7 +23,7 @@ app.post("/checkout",requireAdmin,async(req,res)=>{
  try{const payment=await mollie("/payments",{method:"POST",body:JSON.stringify(body)});if(payment.mode!=="test"||!payment.id?.startsWith("tr_")||!payment._links?.checkout?.href)return fail(res,502,"Unexpected test response");records.set(id,{paymentId:payment.id,item,status:"open"});return res.status(201).json({orderId:id,checkoutUrl:payment._links.checkout.href,mode:"test",paid:false})}catch(_){return fail(res,502,"Mollie test payment unavailable")}
 });
 app.post("/webhook",(_req,res)=>fail(res,503,"Webhook activation requires a durable, secure order ledger and reconciliation"));
-app.post("/refund",_req=>{},(_req,res)=>fail(res,503,"Refunds disabled pending authenticated ledger approval"));
+app.post("/refund",(_req,res)=>fail(res,503,"Refunds disabled pending authenticated ledger approval"));
 app.get("/orders/:id",requireAdmin,async(req,res)=>{
  const order=records.get(req.params.id);if(!order)return fail(res,404,"Unknown order");
  if(!testReady)return fail(res,503,"Mollie test account not configured");
