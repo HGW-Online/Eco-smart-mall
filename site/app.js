@@ -39,6 +39,15 @@
   const navItems=[
     ['home','⌂','الرئيسية','Overview'],
     ['shop','◈','المتجر','Shop'],
+    ['insurance','🛡','التأمين والحماية','Insurance & resilience'],
+    ['circular','♻','إعادة التدوير وسوق المستعمل','Circular marketplace'],
+    ['logistics','▧','اللوجستيات والمحاكاة المالية','Logistics & financial model'],
+    ['cognitive','✧','البنية التحتية المعرفية','Cognitive infrastructure'],
+    ['communications','◎','الاتصالات والبيانات','Communications & data'],
+    ['quality','✓','الجودة والسلامة والتوأمة الرقمية','Quality, safety & digital twins'],
+    ['research','⚗','الدراسات والبحث والمعرفة','Research & knowledge'],
+    ['cyber','🔐','أمن المعلومات والتشفير','Cybersecurity & encryption'],
+    ['devices','⊞','التطبيق والأجهزة','App & devices'],
     ['orders','▤','الطلبات','Orders'],
     ['inventory','▦','المخزون','Inventory'],
     ['members','♙','الأعضاء','Members'],
@@ -64,13 +73,15 @@
     $('notice').textContent='⚠ '+T('موقع تجريبي فقط، لا يتصل بـ Glide أو خدمات دفع. البيانات المحلية ليست سجلاً تجارياً.','Prototype only; no Glide or payment connection. Local data is not a commercial ledger.');
     $('cartCount').textContent=db.cart.reduce((s,i)=>s+i.qty,0);
     $('nav').innerHTML=navItems.map(([id,icon,ar,en])=>'<button type="button" data-page="'+id+'" class="'+(id===page?'current':'')+'" aria-current="'+(id===page?'page':'false')+'">'+icon+' &nbsp;'+T(ar,en)+'</button>').join('');
-    const views={home,shop,orders,inventory,members,vendors,governance,transparency};
+    const views={home,shop,orders,inventory,members,vendors,governance,transparency,
+      cognitive:()=>HGW.render('cognitive',lang),communications:()=>HGW.render('communications',lang),quality:()=>HGW.render('quality',lang),research:()=>HGW.render('research',lang),cyber:()=>HGW.render('cyber',lang),insurance:()=>HGW.render('insurance',lang),circular:()=>HGW.render('circular',lang),
+      logistics:()=>HGW.render('logistics',lang),devices:()=>HGW.render('devices',lang)};
     $('view').innerHTML=(views[page]||home)();
   }
   function home(){
     const low=db.products.filter(x=>x.stock<=3).length, pending=db.orders.filter(x=>x.status==='pending').length;
     return '<section class="hero"><div><div class="eyebrow" style="color:#d3efae">COOPERATIVE • SUSTAINABLE • TRANSPARENT</div><h1>'+T('تجارة ذكية تعود بالنفع على الجميع','Smarter commerce. Shared value.')+'</h1><p>'+T('تجربة تفاعلية لمول تعاوني متعدد البائعين، بعضوية وشفافية وحوكمة ديمقراطية.','Explore a cooperative multi-vendor mall with membership, transparent reporting and democratic participation.')+'</p>'+button('goShop',T('تصفح المتجر ←','Explore products →'),'','btn')+'</div><div class="hero-art" aria-hidden="true">🌿🏬</div></section>'+
-    '<div class="cards">'+stat(T('الطلبات التجريبية','Demo orders'),db.orders.length)+stat(T('بانتظار التأكيد','Awaiting confirmation'),pending)+stat(T('تنبيهات المخزون','Stock alerts'),low)+stat(T('المتاجر','Stores'),shopNames().length)+'</div>'+
+    HGW.overview(lang)+'<div class="cards">'+stat(T('الطلبات التجريبية','Demo orders'),db.orders.length)+stat(T('بانتظار التأكيد','Awaiting confirmation'),pending)+stat(T('تنبيهات المخزون','Stock alerts'),low)+stat(T('المتاجر','Stores'),shopNames().length)+'</div>'+
     '<div class="sectionhead"><h2>'+T('كيف يعمل النظام؟','How it works')+'</h2></div><div class="cards">'+
     '<div class="card"><div class="symbol">🛒</div><h3>'+T('تجربة الطلبات','Test orders')+'</h3><p>'+T('أضف منتجات للسلة وأنشئ طلباً وهمياً، ثم جرّب تأكيده أو إلغاءه.','Add products to your cart, create a sample order, then confirm or cancel it.')+'</p></div>'+
     '<div class="card"><div class="symbol">📦</div><h3>'+T('مراقبة المخزون','Inventory alerts')+'</h3><p>'+T('يُحجز المخزون تلقائياً للطلبات الجديدة وتتم إعادته عند إلغائها.','Stock is reserved on demo checkout and restored when a reserved order is cancelled.')+'</p></div>'+
