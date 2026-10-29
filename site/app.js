@@ -30,7 +30,7 @@
     } catch(e) {}
     return deepCopy(seed);
   };
-  let db=load(),lang='ar',page='allprojects',orderFilter='all',productQuery='';
+  let db=load(),lang='ar',page=(document.body?.dataset.section||'allprojects'),orderFilter='all',productQuery='';
   const T=(ar,en)=>lang==='ar'?ar:en;
   const product=id=>db.products.find(p=>p.id===id);
   const orderValue=o=>o.items.reduce((sum,i)=>sum+(product(i.id)?.price||0)*i.qty,0);
@@ -48,13 +48,22 @@
   ];
   const navItems=[['allprojects','▥','دليل الأقسام','Section directory'],...sectionGroups.flatMap(g=>g.items)];
   function navButton([id,icon,ar,en]){return '<button type="button" data-page="'+id+'" class="'+(id===page?'current':'')+'" aria-current="'+(id===page?'page':'false')+'">'+icon+' &nbsp;'+T(ar,en)+'</button>';}
+  function navigate(id){
+    const known=id==='allprojects'||navItems.some(x=>x[0]===id)||sectionGroups.some(g=>'group-'+g.id===id);
+    if(!known)return;
+    if(window.location&&typeof window.location.assign==='function'){
+      window.location.assign('./'+(id==='allprojects'?'index':id)+'.html?v=20261029.2');
+      return;
+    }
+    page=id;render();window.scrollTo(0,0);
+  }
   function save(){try{localStorage.setItem(STORE_KEY,JSON.stringify(db));}catch(e){notify(T('تعذر حفظ البيانات في المتصفح','Local browser storage unavailable'));}}
   function notify(msg){const n=$('notice');n.textContent='⚠ '+msg;}
   function pill(value,warning=false){return '<span class="pill'+(warning?' warn':'')+'">'+safe(value)+'</span>';}
   function button(action,label,id='',cls='btn small',disabled=false){
     return '<button type="button" class="'+cls+'" data-action="'+safe(action)+'" data-id="'+safe(id)+'" '+(disabled?'disabled':'')+'>'+label+'</button>';
   }
-  function heading(title,desc){return '<div class="eyebrow">ECO SMART MALL</div><h1>'+title+'</h1><p class="lede">'+desc+'</p>';}
+  function heading(title,desc){return '<div class="eyebrow">HGW GLOBAL</div><h1>'+title+'</h1><p class="lede">'+desc+'</p>';}
   function stat(label,value,detail=''){return '<div class="card metric">'+label+'<strong>'+value+'</strong><small>'+detail+'</small></div>';}
   function render(){
     document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
@@ -156,7 +165,7 @@
     items.forEach(i=>{product(i.id).stock-=i.qty;});
     const id='ECO-DEMO-'+String(db.nextOrder++).padStart(4,'0');
     db.orders.unshift({id,items,status:'pending',payment:'unpaid',reserved:true,source:'demo'});
-    db.cart=[];save();closeDialog();page='orders';render();notify(T('تم إنشاء طلب تجريبي غير مدفوع: ','Created unpaid demo order: ')+id);
+    db.cart=[];save();closeDialog();navigate('orders');notify(T('تم إنشاء طلب تجريبي غير مدفوع: ','Created unpaid demo order: ')+id);
   }
   function transition(id,action){
     const o=db.orders.find(x=>x.id===id);if(!o)return;
@@ -175,9 +184,9 @@
     if(b.id==='lang'){lang=lang==='ar'?'en':'ar';render();return;}
     if(b.id==='cartBtn'){showCart();return;}
     if(b.id==='closeDialog'){closeDialog();return;}
-    if(b.dataset.page){page=b.dataset.page;render();window.scrollTo(0,0);return;}
+    if(b.dataset.page){navigate(b.dataset.page);return;}
     const {action,id}=b.dataset;if(!action)return;
-    if(action==='goShop'){page='shop';render();return;}
+    if(action==='goShop'){navigate('shop');return;}
     if(action==='openCart'){showCart();return;}
     if(action==='add'){add(id);return;}
     if(action==='plus'){changeQty(id,1);return;}
