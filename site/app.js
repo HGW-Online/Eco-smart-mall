@@ -52,7 +52,7 @@
     const known=id==='allprojects'||navItems.some(x=>x[0]===id)||sectionGroups.some(g=>'group-'+g.id===id);
     if(!known)return;
     if(window.location&&typeof window.location.assign==='function'){
-      window.location.assign('./'+(id==='allprojects'?'index':id)+'.html?v=20261029.2');
+      window.location.assign('./'+(id==='allprojects'?'index':id)+'.html?v=20261029.3');
       return;
     }
     page=id;render();window.scrollTo(0,0);
