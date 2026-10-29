@@ -8,8 +8,8 @@ const html=fs.readFileSync(path.join(base,'index.html'),'utf8');
 const css=fs.readFileSync(path.join(base,'styles.css'),'utf8');
 const app=fs.readFileSync(path.join(base,'app.js'),'utf8');
 test('site contains required entrypoints and visible demo disclaimer',()=>{
- assert.match(html,/src="\.\/app\.js"/);
- assert.match(html,/href="\.\/styles\.css"/);
+ assert.match(html,/src="\.\/app\.js(?:\?v=[^"]+)?"/);
+ assert.match(html,/href="\.\/styles\.css(?:\?v=[^"]+)?"/);
  assert.match(html,/id="view"/);
  assert.match(html,/id="dialog"/);
  assert.match(html,/لا تتصل بـ Glide/);

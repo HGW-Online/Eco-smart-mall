@@ -10,5 +10,7 @@ document.addEventListener('click',async event=>{
   else status.textContent=ar?'استخدم تعليمات نظامك أدناه. قد يكون التطبيق مثبتًا بالفعل أو المتصفح لا يعرض تثبيتًا مباشرًا.':'Use the instructions below. The app may already be installed or this browser may not offer direct installation.';
 });
 if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{/* Online use remains available. */}));
+  let hgwReloading=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!hgwReloading){hgwReloading=true;location.reload();}});
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(registration=>registration.update()).catch(()=>{/* Online use remains available. */}));
 }

@@ -36,6 +36,7 @@ jobs:
           node-version: '22'
       - name: Verify HGW before publishing
         run: |
+          node scripts/build-section-pages.cjs
           node --check site/app.js
           node --check site/hgw.js
           node --check site/resources-data.js
