@@ -34,10 +34,10 @@ test('integrated app navigation renders every sector and language',()=>{
  const element=id=>{if(!elements.has(id))elements.set(id,{id,textContent:'',innerHTML:'',addEventListener(){},classList:{contains(){return true;},add(){},remove(){}}});return elements.get(id);};
  const document={documentElement:{},getElementById:element,querySelector:()=>element('demo'),addEventListener(type,fn){(listeners[type]??=[]).push(fn);}};
  const window={document,scrollTo(){}};const ctx={window,document,Intl,console,localStorage:{getItem(){return null;},setItem(){}},setTimeout};
- for(const file of ['resources-data.js','resources.js','hgw.js','app.js']){vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../site',file),'utf8'),ctx);if(file==='hgw.js')ctx.HGW=window.HGW;if(file==='resources.js')ctx.HGWResources=window.HGWResources;}
+ for(const file of ['resources-data.js','resources.js','abundance.js','hgw.js','app.js']){vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../site',file),'utf8'),ctx);if(file==='hgw.js')ctx.HGW=window.HGW;if(file==='resources.js')ctx.HGWResources=window.HGWResources;if(file==='abundance.js')ctx.HGWAbundance=window.HGWAbundance;}
  const click=button=>{for(const fn of listeners.click||[])fn({target:{closest:()=>button}});};
  for(let language=0;language<2;language++){
-  for(const page of ['home','resources','insurance','circular','logistics','cyber','research','quality','communications','cognitive','devices']){
+  for(const page of ['home','resources','abundance','insurance','circular','logistics','cyber','research','quality','communications','cognitive','devices']){
    click({dataset:{page}});assert.match(element('view').innerHTML,/<h1>/);assert.doesNotMatch(element('view').innerHTML,/undefined/);
   }
   click({id:'lang',dataset:{}});
