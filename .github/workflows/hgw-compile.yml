@@ -1,0 +1,29 @@
+name: Compile HGW fixed supply token
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - contracts/HGWToken.sol
+      - scripts/hgw-compile.cjs
+      - .github/workflows/hgw-compile.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Solidity dependencies
+        run: npm install --no-save --no-package-lock --ignore-scripts solc@0.8.20 @openzeppelin/contracts@5.0.2
+      - name: Compile fixed-supply token
+        run: node scripts/hgw-compile.cjs
+      - name: Commit static deployment artifact
+        run: |
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git config user.name 'github-actions[bot]'
+          git add site/hgw-deploy-artifact.json
+          git diff --cached --quiet || (git commit -m 'build: compile HGW deploy artifact' && git push)
