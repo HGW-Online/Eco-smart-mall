@@ -1,0 +1,13 @@
+const fs=require('node:fs'),crypto=require('node:crypto'),solc=require('solc');
+const source=fs.readFileSync('contracts/HGWToken.sol','utf8');
+const input={language:'Solidity',sources:{'HGWToken.sol':{content:source}},settings:{optimizer:{enabled:true,runs:200},evmVersion:'paris',outputSelection:{'*':{'*':['abi','evm.bytecode.object']}}}};
+const imports=p=>{try{return{contents:fs.readFileSync('node_modules/'+p,'utf8')}}catch(e){return{error:'Import not found: '+p}}};
+const output=JSON.parse(solc.compile(JSON.stringify(input),{import:imports}));
+if(output.errors?.some(e=>e.severity==='error'))throw Error(output.errors.map(e=>e.formattedMessage).join('\n'));
+const c=output.contracts['HGWToken.sol'].HumanityGlobalWelfareToken;
+if(!c?.evm?.bytecode?.object)throw Error('No bytecode');
+if(c.abi.filter(e=>e.type==='function').some(e=>['mint','pause','upgradeTo','grantRole'].includes(e.name)))throw Error('Privileged method detected');
+const bytecode='0x'+c.evm.bytecode.object;
+const out={name:'Humanity Global Welfare',symbol:'HGW',decimals:18,totalSupply:'1000000000',chainId:56,compiler:solc.version(),sourceSha256:crypto.createHash('sha256').update(source).digest('hex'),bytecodeSha256:crypto.createHash('sha256').update(bytecode).digest('hex'),abi:c.abi,bytecode};
+fs.writeFileSync('site/hgw-deploy-artifact.json',JSON.stringify(out,null,2)+'\n');
+console.log(out.compiler,out.bytecodeSha256);
