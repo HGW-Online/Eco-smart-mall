@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>منصة HGW الرقمية</title>
+<link rel="stylesheet" href="./workbench.css">
+<link rel="manifest" href="./manifest.webmanifest">
+<script src="./workbench.js" defer></script>
+</head>
+<body>
+<header><a href="./index.html">HGW GLOBAL</a><a href="https://github.com/HGW-Online/Eco-smart-mall/pull/20">مراجعة GitHub ↗</a></header>
+<main>
+<h1>منصة HGW الرقمية</h1>
+<p>أدوات التطوير والتحقق والربط المالي، مع حالة كل خدمة.</p>
+<div class="grid">
+<section>
+<h2>المحفظة ومستكشف العملات الرقمية</h2>
+<button id="wallet" type="button">قراءة المحفظة المتصلة</button>
+<p id="wallet-status" role="status">يدعم المتصفحات التي توفر محفظة EVM مدمجة.</p>
+<label for="network">الشبكة</label>
+<select id="network"><option value="celo">Celo Sepolia · تجريبية</option><option value="gnosis">Gnosis · إنتاجية، قراءة عامة</option></select>
+<label for="identifier">عنوان عام أو رقم معاملة</label>
+<input id="identifier" dir="ltr" maxlength="66" autocomplete="off">
+<button id="lookup" type="button">إنشاء رابط Blockscout</button>
+<p id="explorer-status" role="status"></p>
+<a id="result" hidden>فتح النتيجة في Blockscout ↗</a>
+</section>
+<section>
+<h2>البرمجة والعقود الذكية</h2>
+<ul>
+<li><a href="https://github.com/codespaces/new?repo=1431675578">VS Code وTerminal عبر Codespaces ↗</a></li>
+<li><a href="https://remix.ethereum.org/">Remix IDE ↗</a></li>
+<li><a href="https://github.com/HGW-Online/Eco-smart-mall/blob/main/contracts/HGWToken.sol">مصدر عقد HGW ومراجع OpenZeppelin ↗</a></li>
+<li><a href="https://github.com/HGW-Online/Eco-smart-mall/actions">سجل GitHub Actions ↗</a></li>
+</ul>
+<p>أوامر التجميع والتحقق المحلي عبر Terminal</p>
+<pre dir="ltr">node scripts/hgw-workbench.cjs help</pre>
+</section>
+<section>
+<h2>Open Banking وeID</h2>
+<ul>
+<li><a href="https://github.com/HGW-Online/Eco-smart-mall/blob/main/docs/HGW-WALLETCONNECT-TINK-READONLY-INTEGRATION.md">Tink وWalletConnect ↗</a> · إعدادات موثقة، الربط بانتظار تهيئة المزوّد.</li>
+<li><a href="https://github.com/HGW-Online/Eco-smart-mall/blob/main/docs/LUNAR-OPEN-BANKING-INTEGRATION.md">Lunar Open Banking ↗</a> · مسار إعداد القراءة.</li>
+<li><a href="./checkout-sandbox.html">تجربة الهوية والتحقق ↗</a> · بيانات تجريبية.</li>
+<li><a href="https://github.com/HGW-Online/Eco-smart-mall/tree/main/integrations/signicat">خدمة Signicat وملفات الاختبار ↗</a> · يتطلب الاتصال الفعلي إعداد بيئة المزوّد.</li>
+</ul>
+</section>
+<section>
+<h2>الحسابات والبطاقات وSWIFT</h2>
+<ul>
+<li><a href="https://www.swift.com/bsl/">دليل رموز المؤسسات BIC / SWIFT ↗</a></li>
+<li>أرصدة الحسابات ومعاملات البطاقات · بانتظار موافقة صاحب الحساب وربط مزوّد الخدمات المصرفية.</li>
+</ul>
+</section>
+<section>
+<h2>PayPal وخدمات الدفع</h2>
+<ul>
+<li><a href="https://www.paypal.com/activity/">سجل معاملات حساب PayPal ↗</a> · يفتح لدى PayPal.</li>
+<li><a href="./checkout-sandbox.html">تجربة الشراء والتحقق في HGW ↗</a> · بيئة تجريبية.</li>
+<li>عرض معاملات PayPal ومزوّدي الدفع داخل HGW · بانتظار ربط حسابات المزوّدين.</li>
+</ul>
+</section>
+<section>
+<h2>مستكشف الأصول</h2>
+<ul>
+<li><a href="https://github.com/HGW-Online/Eco-smart-mall/blob/main/demo/UNIFIED-ASSETS.md">سجل الأصول والأدوات المالية في المشروع ↗</a> · نموذج تجريبي.</li>
+<li>لعرض سجل توكن أو عقد عام، أدخل عنوانه في مستكشف العملات الرقمية واختر شبكته.</li>
+</ul>
+</section>
+<section>
+<h2>ملاحظات التحقق المشفّرة</h2>
+<p>صدّر ملاحظاتك في ملف مشفّر محليًا. احتفظ بعبارة المرور لفتح الملف لاحقًا.</p>
+<label for="note">الملاحظات</label>
+<textarea id="note" rows="4" maxlength="16000"></textarea>
+<label for="passphrase">عبارة المرور، 12 حرفًا على الأقل</label>
+<input id="passphrase" type="password" autocomplete="off" minlength="12">
+<button id="export" type="button">تصدير ملف مشفّر</button>
+<label for="import">اختيار ملف مشفّر لفتحه</label>
+<input id="import" type="file" accept=".json,application/json">
+<button id="decrypt" type="button">فتح الملف</button>
+<p id="crypto-status" role="status"></p>
+</section>
+</div>
+</main>
+</body>
+</html>
