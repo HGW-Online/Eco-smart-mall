@@ -9,7 +9,7 @@ contract HGWTest is Test {
     address treasury=address(100);
     function setUp() public {
         address[] memory v=new address[](4);
-        for(uint i;i<4;i++) v[i]=address(i+10);
+        for(uint i;i<4;i++) v[i]=address(uint160(i+10));
         g=new HGWGovernance(v,100 ether);
         t=new HGWUtility(treasury,address(g));
         g.bindUtility(address(t)); a=new HGWAssets();
@@ -18,7 +18,7 @@ contract HGWTest is Test {
         vm.prank(address(10)); id=g.propose(treasury,10 ether,keccak256("test evidence"));
     }
     function vote(uint id,uint n) internal {
-        for(uint i;i<n;i++){vm.prank(address(i+10));g.voteYes(id);}
+        for(uint i;i<n;i++){vm.prank(address(uint160(i+10)));g.voteYes(id);}
     }
     function testInitialSupply() public view {
         assertEq(t.totalSupply(),1_000_000_000 ether);
