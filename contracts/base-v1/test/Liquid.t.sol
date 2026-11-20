@@ -7,7 +7,7 @@ contract LiquidTest is Test {
     LiquidGovernance g; HGWUtility t;
     function setUp() public {
         address[] memory v=new address[](4);
-        for(uint i;i<4;i++) v[i]=address(i+10);
+        for(uint i;i<4;i++) v[i]=address(uint160(i+10));
         g=new LiquidGovernance(v,100 ether);
         t=new HGWUtility(address(100),address(g)); g.bindUtility(address(t));
     }
@@ -23,14 +23,14 @@ contract LiquidTest is Test {
         (y,)=g.tally(id);assertEq(y,1);
     }
     function testThreshold() public {
-        uint id=proposal();for(uint i;i<3;i++)yes(id,address(i+10));
+        uint id=proposal();for(uint i;i<3;i++)yes(id,address(uint160(i+10)));
         vm.warp(block.timestamp+9 days);
         vm.expectRevert(bytes("threshold"));g.execute(id);
     }
     function testMemberChangeInvalidatesOldProposals() public {
         uint old=proposal();vm.prank(address(10));
         uint id=g.propose(LiquidGovernance.Kind.AddMember,address(20),0,keccak256("membership"));
-        for(uint i;i<4;i++)yes(id,address(i+10));
+        for(uint i;i<4;i++)yes(id,address(uint160(i+10)));
         vm.warp(block.timestamp+9 days);g.execute(id);assertTrue(g.member(address(20)));
         vm.expectRevert(bytes("execution"));g.execute(old);
     }
