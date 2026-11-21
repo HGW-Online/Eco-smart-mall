@@ -15,6 +15,7 @@ jobs:
           node --check --input-type=module < wallet-app.js
           node --check --input-type=module < gno-land.js
           node --check --input-type=module < integrations.js
+          node --check --input-type=module < reown-connect.js
       - name: Verify snapshot and required UI controls
         run: |
           python3 - <<'PY'
@@ -28,5 +29,7 @@ jobs:
           for uid in ("alchemySnapshot","scan","connect","chain","contract","gnoScan","walletProviders","diagnose","watchList"):
               assert f'id="{uid}"' in h, uid
           assert "wallet-app.js" in h and "integrations.js" in h
+          assert "./reown.html" in h
+          assert "wcStart" in Path("reown.html").read_text()
           print("Static UI, JSON, JavaScript checks passed.")
           PY
