@@ -1,0 +1,32 @@
+name: HGW Wallet UI smoke tests
+on:
+  push:
+    branches: [gh-pages]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  static-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse all wallet JavaScript modules
+        run: |
+          node --check --input-type=module < wallet-app.js
+          node --check --input-type=module < gno-land.js
+          node --check --input-type=module < integrations.js
+      - name: Verify snapshot and required UI controls
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          h=Path("index.html").read_text()
+          s=json.loads(Path("alchemy-snapshot.json").read_text())
+          assert s["schema"]=="hgw-wallet-snapshot-v1"
+          assert len(s["networkBalances"])>=5
+          assert len(s["verifiedErc20"])>=2
+          for uid in ("alchemySnapshot","scan","connect","chain","contract","gnoScan","walletProviders","diagnose","watchList"):
+              assert f'id="{uid}"' in h, uid
+          assert "wallet-app.js" in h and "integrations.js" in h
+          print("Static UI, JSON, JavaScript checks passed.")
+          PY
