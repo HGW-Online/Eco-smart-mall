@@ -46,3 +46,25 @@ export function explorerLink(address) {
   if (!isGnoAddress(address)) throw new Error("Invalid Gno.land address");
   return GNO_LAND.explorer + "/address/" + encodeURIComponent(address);
 }
+
+/** Read current native bank balance (ugnot) from Gno.land RPC without wallet keys.
+ * Results do not include locked vesting allocations or proof of account ownership.
+ */
+export async function getGnoBalances(address, fetcher=fetch){
+  if(!isGnoAddress(address))throw Error("Invalid Gno.land account address");
+  const url=new URL(GNO_LAND.rpc+"/abci_query");
+  url.searchParams.set("path",JSON.stringify("bank/balances/"+address));
+  const res=await fetcher(url.toString(),{method:"GET",cache:"no-store"});
+  if(!res.ok)throw Error("RPC HTTP "+res.status);
+  const doc=await res.json();
+  if(doc.error)throw Error(doc.error.message||"RPC error");
+  const r=doc.result?.response?.ResponseBase;
+  if(!r)throw Error("Missing Gno.land ResponseBase");
+  if(r.Error)throw Error(typeof r.Error==="string"?r.Error:JSON.stringify(r.Error));
+  if(!r.Data)return {address,raw:"",balanceGNOT:null,unavailable:true};
+  const bytes=Uint8Array.from(atob(r.Data),ch=>ch.charCodeAt(0));
+  const decoded=new TextDecoder().decode(bytes);
+  const match=decoded.match(/(\d+)ugnot/);
+  const native=match?((BigInt(match[1])/1000000n).toString()+"."+((BigInt(match[1])%1000000n).toString().padStart(6,"0"))):null;
+  return {address,raw:decoded,balanceGNOT:native,unavailable:false};
+}
