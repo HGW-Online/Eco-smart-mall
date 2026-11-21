@@ -1,0 +1,19 @@
+{
+  "name": "Humanity Global Welfare",
+  "symbol": "HGw",
+  "decimals": 18,
+  "initialSupply": "1000000000",
+  "treasury": "0x1bEa1C51c721A0D10ECEaa7DE9693d1e07454df9",
+  "treasuryControlVerified": false,
+  "networks": {
+    "test": 84532,
+    "production": 8453
+  },
+  "governance": "direct liquid democracy",
+  "approval": "strictly greater than 75% of all eligible members",
+  "deployment": {
+    "test": null,
+    "production": null
+  },
+  "status": "review-only"
+}
