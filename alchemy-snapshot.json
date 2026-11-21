@@ -1,0 +1,57 @@
+{
+  "schema": "hgw-wallet-snapshot-v1",
+  "source": "Connected Alchemy Master app (server-side query)",
+  "retrievedDateUTC": "2026-11-21",
+  "address": "0x1bea1c51c721a0d10eceaa7de9693d1e07454df9",
+  "networkBalances": [
+    {
+      "chain": "Ethereum Mainnet",
+      "network": "eth-mainnet",
+      "native": "ETH",
+      "wei": "0x177a5333ce0fdc"
+    },
+    {
+      "chain": "Base Mainnet",
+      "network": "base-mainnet",
+      "native": "ETH",
+      "wei": "0x0"
+    },
+    {
+      "chain": "Gnosis Mainnet",
+      "network": "gnosis-mainnet",
+      "native": "xDAI",
+      "wei": "0xf403c8b97ccd"
+    },
+    {
+      "chain": "Celo Mainnet",
+      "network": "celo-mainnet",
+      "native": "CELO",
+      "wei": "0x0"
+    },
+    {
+      "chain": "Celo Sepolia Testnet",
+      "network": "celo-sepolia",
+      "native": "CELO",
+      "wei": "0x36da6865f0162400"
+    }
+  ],
+  "verifiedErc20": [
+    {
+      "network": "gnosis-mainnet",
+      "name": "YunJiaMi on xDai",
+      "symbol": "YJM",
+      "contract": "0x81765e9e44C16C7E8f52952b8936F5e715e04625",
+      "decimals": 18,
+      "rawBalance": "0x0000000000000000000000000000000000000000000014168ca84ad1579efb2a"
+    },
+    {
+      "network": "celo-sepolia",
+      "name": "Humanity Global Welfare (TEST)",
+      "symbol": "HGW",
+      "contract": "0x35faAa8C0ACE3a99cdB3D9f05889109323d555E3",
+      "decimals": 18,
+      "rawBalance": "0x0000000000000000000000000000000000000000033b2e3c9fd0803ce8000000"
+    }
+  ],
+  "disclaimer": "Balances are a one-time verified snapshot, not a continuously connected live wallet. Non-EVM Gno.land is not part of this EVM snapshot. Tokens with unknown liquidity have no assumed USD value."
+}
