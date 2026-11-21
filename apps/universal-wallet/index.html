@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HGW Universal Wallet — Gno.land</title>
+<style>body{font:16px system-ui;background:#101827;color:#f1f5f9;margin:0;padding:24px}main{max-width:650px;margin:auto}.panel{border:1px solid #334155;padding:22px;border-radius:16px;background:#1e293b}input,button{box-sizing:border-box;padding:14px;border-radius:10px;font:inherit}input{width:100%;background:#0f172a;border:1px solid #64748b;color:white;direction:ltr;text-align:left}button{background:#0d9488;color:white;border:0;cursor:pointer;margin-top:12px;width:100%}a{color:#5eead4}pre{overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}small{color:#cbd5e1}.warning{color:#fcd34d}</style></head>
+<body><main><h1>HGW Universal Wallet</h1><section class="panel"><h2>Gno.land Mainnet — GNOT</h2>
+<p>حساب مشاهدة فقط على شبكة مستقلة غير EVM. لا يمكن إضافتها داخل MetaMask كشبكة Ethereum.</p>
+<label for="account">عنوان الحساب (g1...)</label>
+<input id="account" autocomplete="off" spellcheck="false" value="g1zhwyfs8f8hjd50y28fcn05ew5d6mtz0vkh6h8v">
+<button id="lookup">فحص الحساب من الشبكة</button><p id="status" aria-live="polite">لم يبدأ الفحص بعد</p>
+<pre id="result"></pre><p><a id="explorer" href="https://gnoscan.io/" target="_blank" rel="noopener">فتح المستكشف</a></p>
+<p class="warning">قراءة الحساب لا تثبت ملكيته ولا تحدد الأموال المتاحة أو المقفلة. استيراد Private Key واستعادة Web3Auth/MPC غير مفعلين هنا حتى اكتمال المراجعة الأمنية والتكامل الرسمي.</p>
+<small>Network: gnoland-1 · RPC: https://rpc.gno.land:443 · Token: GNOT</small>
+</section></main>
+<script type="module">
+import { GNO_LAND, isGnoAddress, getGnoAccount, explorerLink } from "./gno-land.js";
+const account=document.querySelector("#account"), status=document.querySelector("#status"), result=document.querySelector("#result"), link=document.querySelector("#explorer");
+document.querySelector("#lookup").addEventListener("click",async()=>{
+ const address=account.value.trim(); result.textContent="";
+ if(!isGnoAddress(address)){status.textContent="العنوان غير صالح. مطلوب عنوان Gno.land يبدأ بـ g1.";return;}
+ link.href=explorerLink(address);status.textContent="جاري الاستعلام من Gno.land...";
+ try{const data=await getGnoAccount(address);status.textContent=data.found?"تم العثور على سجل الحساب (قراءة فقط)":"لم يعثر RPC على حساب مسجل";result.textContent=data.found?JSON.stringify(data.account,null,2):"لا بيانات حساب؛ تحقق من المستكشف";}
+ catch(e){status.textContent="تعذر الاتصال من المتصفح. استخدم رابط المستكشف للتحقق.";result.textContent=e.message;}
+});
+</script></body></html>
