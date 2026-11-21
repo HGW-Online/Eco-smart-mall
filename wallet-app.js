@@ -52,3 +52,33 @@ document.addEventListener("DOMContentLoaded",()=>{
  renderWatch();populatePresets();
  document.getElementById("quickGno")?.addEventListener("click",()=>window.open("https://gnoscan.io/","_blank","noopener"));
 });
+
+async function showAlchemySnapshot(){
+ const root=document.getElementById("alchemySnapshot");if(!root)return;
+ try{
+  const response=await fetch("./alchemy-snapshot.json",{cache:"no-store"});
+  if(!response.ok)throw Error("Snapshot HTTP "+response.status);
+  const data=await response.json();if(data.schema!=="hgw-wallet-snapshot-v1")throw Error("Unknown data format");
+  root.replaceChildren();
+  const header=document.createElement("p");
+  header.className="muted";
+  header.textContent="العنوان: "+data.address+" · المصدر: Alchemy · التاريخ: "+data.retrievedDateUTC;
+  root.append(header);
+  for(const item of data.networkBalances){
+    const row=document.createElement("div");row.className="result";
+    const name=document.createElement("strong");name.textContent=item.chain;
+    const value=document.createElement("span");value.textContent=format(item.wei)+" "+item.native;
+    row.append(name,value);root.append(row);
+  }
+  for(const item of data.verifiedErc20){
+    const row=document.createElement("div");row.className="result";
+    const name=document.createElement("strong");name.textContent=item.symbol+" ("+item.network+")";
+    const value=document.createElement("span");value.textContent=format(item.rawBalance,item.decimals)+" "+item.symbol;
+    row.append(name,value);root.append(row);
+  }
+  const warning=document.createElement("p");warning.className="warn";
+  warning.textContent="هذه لقطة أرصدة عامة وليست تحديثًا حيًا أو تقديرًا نقديًا؛ لا تتضمن الحسابات غير المتوافقة مع EVM مثل Gno.land.";
+  root.append(warning);
+ }catch(err){root.textContent="تعذر قراءة لقطة Alchemy: "+err.message;}
+}
+document.addEventListener("DOMContentLoaded",showAlchemySnapshot);
