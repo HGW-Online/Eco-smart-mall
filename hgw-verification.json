@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-21",
+  "network": "base-mainnet",
+  "chainId": 8453,
+  "provider": "Alchemy Master",
+  "method": "read-only eth_call",
+  "contracts": [
+    {
+      "id": "HGW-001",
+      "address": "0x439266a1e38872dd536558252f06699f5801b42b",
+      "symbol": "HGW",
+      "name": "Humanity Global Welfare",
+      "totalSupplyRaw": "1000000000000000000000000000",
+      "decimals": 18,
+      "owner": "0x1bea1c51c721a0d10eceaa7de9693d1e07454df9",
+      "pausedQuery": "reverted; capability unknown"
+    },
+    {
+      "id": "HGW-002",
+      "address": "0xb5533795f8e7802a70e888ffc65655bd5e702801",
+      "symbol": "HGW ",
+      "name": "Humanity Global Welfare",
+      "totalSupplyRaw": "1000000000000000000000000000",
+      "decimals": 18,
+      "owner": "0x1bea1c51c721a0d10eceaa7de9693d1e07454df9",
+      "pausedQuery": "reverted; capability unknown"
+    }
+  ],
+  "status": {
+    "sourceVerification": "pending",
+    "independentAudit": "pending",
+    "listing": "not submitted",
+    "regulatory": "pending"
+  }
+}
