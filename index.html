@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Eco Smart Mall — Demo</title>
+<title>HGW</title>
+<meta name="description" content="HGW — Humanity Global Welfare. تصفّح فهرس المشروعات والمنصة.">
 <style>
 *{box-sizing:border-box}body{font-family:system-ui,-apple-system,sans-serif;margin:0;background:#f4f6f8;color:#17212c}
 header{background:#123c35;color:white;padding:20px;display:flex;justify-content:space-between;gap:12px;align-items:center}
@@ -15,11 +16,13 @@ nav{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}.active{background:#c9ebe3
 table{width:100%;border-collapse:collapse;min-width:630px}td,th{padding:10px;border-bottom:1px solid #ddd;text-align:start}
 .scroll{overflow:auto}.tag{background:#f0f2f3;padding:4px 8px;border-radius:9px}small{color:#59656a}
 footer{padding:20px;text-align:center}
+.welcome h1{margin:0;font-size:clamp(2rem,7vw,3.5rem)}.welcome p{line-height:1.55}
+.welcome-links{display:flex;flex-wrap:wrap;gap:.65rem}.welcome-links a{display:inline-flex;align-items:center;min-height:44px;padding:.55rem .9rem;border-radius:.5rem;border:1px solid #123c35;color:#123c35;font-weight:700;text-decoration:none}.welcome-links a:first-child{background:#123c35;color:white}.welcome-links a:focus-visible{outline:3px solid #2876ca;outline-offset:3px}
 </style>
 </head>
 <body>
-<header><div><strong>Eco Smart Mall</strong><div id="subtitle">لوحة المالك التجريبية</div></div><button id="lang" type="button">English</button></header>
-<main id="home"><div class="card"><a href="./site/hgw/"><strong>فهرس مواقع HGW / HGW Site Directory</strong></a> · <a href="./site/#home">منصة HGW Global</a></div><div class="card"><strong id="notice">بيانات تجريبية فقط — لا مدفوعات حقيقية ولا اتصال بـ Glide</strong></div><div class="stats" id="stats"></div><nav id="tabs" aria-label="Sections"></nav><section id="content" aria-live="polite"></section></main>
+<header><div><strong>HGW</strong><div id="subtitle">لوحة المالك التجريبية</div></div><button id="lang" type="button">English</button></header>
+<main id="home"><section class="card welcome" aria-labelledby="welcome-title"><h1 id="welcome-title">HGW</h1><p lang="en" dir="ltr" style="text-align:inherit">Humanity Global Welfare</p><div class="welcome-links"><a href="./site/hgw/">فهرس المواقع والمشروعات <span lang="en"> · Directory</span></a><a href="./site/#home">تصفح المنصة <span lang="en"> · Explore HGW</span></a></div></section><div class="card"><strong id="notice">بيانات تجريبية فقط — لا مدفوعات حقيقية ولا اتصال بـ Glide</strong></div><div class="stats" id="stats"></div><nav id="tabs" aria-label="Sections"></nav><section id="content" aria-live="polite"></section></main>
 <footer>DEMO • Local only • No payments · <a href="whitepaper.html">HGW Whitepaper | الورقة البيضاء</a></footer>
 <script src="app.js"></script>
 </body></html>

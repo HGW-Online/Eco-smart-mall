@@ -107,7 +107,7 @@ function applyLanguage() {
   const copy = ui[language];
   document.documentElement.lang = language;
   document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
-  document.title = 'HGW | ' + copy.brand;
+  document.title = 'HGW';
   picker.value = language;
   for (const node of document.querySelectorAll('[data-text]')) node.textContent = copy[node.dataset.text];
   query.placeholder = copy.placeholder;
