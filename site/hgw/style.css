@@ -1,0 +1,43 @@
+:root{font-family:system-ui,sans-serif;color:#edf5f3;background:#0d181b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0}
+a{color:#9cecd3}
+header{border-bottom:1px solid #304445;display:flex;align-items:center;justify-content:space-between;padding:1.15rem max(5vw,1rem);gap:1rem}
+.brand{font-size:1.2rem;text-decoration:none;font-weight:850}
+.brand span{padding-inline-start:.5rem;color:#edf5f3}
+main{max-width:1180px;margin:auto;padding:0 1rem 3rem}
+.hero{margin:2rem 0;padding:clamp(1.3rem,5vw,4rem);background:linear-gradient(120deg,#183738,#10282b);border:1px solid #375657;border-radius:1.4rem}
+h1{font-size:clamp(2rem,6vw,4.7rem);margin:0;line-height:1.16}
+.hero p{margin:1.2rem 0 1.5rem}
+label{display:block;margin-bottom:.45rem}
+input,button{font:inherit;color:inherit;background:#102023;border:1px solid #4d6c69;border-radius:.65rem;padding:.65rem .9rem}
+input{width:min(100%,38rem)}
+button{cursor:pointer}
+button[aria-pressed=true]{background:#a3efda;color:#0e2624;border-color:#a3efda}
+#filters{display:flex;flex-wrap:wrap;gap:.55rem}
+#modules{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:1rem}
+article,details{border:1px solid #304b4b;background:#142427;border-radius:1rem;padding:1.2rem}
+article h2{margin:0;font-size:1.25rem}
+article p,#count{color:#bdd0ce}
+article ul{padding-inline-start:1.25rem;line-height:1.9}
+details{margin-top:2rem}
+summary{cursor:pointer}
+a,button,input{outline-offset:4px}
+header,.header-actions{display:flex;flex-wrap:wrap}
+.header-actions{gap:.8rem;align-items:center}
+.language{margin:0}
+select{font:inherit;color:inherit;background:#102023;border:1px solid #4d6c69;border-radius:.65rem;padding:.5rem .65rem}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.link-note{font-size:.875rem;color:#bdd0ce;margin-inline-start:.35rem}
+.hero h1{max-width:19ch}
+
+.tool-list, #source-list { list-style: none; padding-inline-start: 0; }
+.tool-list li, #source-list li { padding-block: .65rem; border-top: 1px solid #304b4b; line-height: 1.55; }
+.tool-list a, #source-list a { font-weight: 650; }
+.link-description { color: #bdd0ce; margin: .3rem 0 0; line-height: 1.55; }
+#modules { align-items: start; }
+
+.solidarity { margin-block: 1.5rem; border-inline-start: 2px solid #9cecd3; padding-inline-start: 1rem; }
+.solidarity h2 { margin-block: 0 .5rem; font-size: 1.1rem; }
+.solidarity ul { margin: 0; padding-inline-start: 1.1rem; color: #d6e8e4; line-height: 1.6; }
+.solidarity li + li { margin-block-start: .4rem; }
