@@ -1,37 +1,33 @@
-# Simple workflow for deploying static content to GitHub Pages
+# ينشر مجلد site/ والمحفظة الذكية (على المسار /smart-wallet/) إلى GitHub Pages.
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  # البناء بدون صلاحية النشر، لأن تثبيت المكتبات يشغل كوداً خارجياً.
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    env:
+      # مفتاح متصفح: يظهر لكل زائر. حمايته بقيد النطاقات وحدود سياسة الغاز.
+      # لتغييره أضف متغير VITE_ALCHEMY_API_KEY في إعدادات المستودع. لا تضع Master key أبداً.
+      VITE_ALCHEMY_API_KEY: ${{ vars.VITE_ALCHEMY_API_KEY || 'alch_AVc0QDwqy7akNI8R4WKFR' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '22'
       - name: Verify HGW before publishing
@@ -47,14 +43,40 @@ jobs:
           node --check site/pwa.js
           node --check site/sw.js
           node --test tests/*.test.cjs
+      - name: Build and test smart wallet
+        run: |
+          bash smart-wallet/ci.sh
+          cp -r smart-wallet/dist site/smart-wallet
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:
           path: './site'
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
-      
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+
+  verify-live:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Check the published wallet
+        env:
+          VITE_ALCHEMY_API_KEY: ${{ vars.VITE_ALCHEMY_API_KEY || 'alch_AVc0QDwqy7akNI8R4WKFR' }}
+        run: bash smart-wallet/verify-live.sh https://hgw-online.github.io/Eco-smart-mall/

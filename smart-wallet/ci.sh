@@ -3,9 +3,9 @@
 set -uo pipefail
 cd "$(dirname "$0")"
 
-export VITE_PRIVY_APP_ID=cmvw5mrln007h0hldxdf3mps4
-export VITE_ALCHEMY_API_KEY=build-check-placeholder
-export VITE_ALCHEMY_POLICY_ID=b167bb59-2027-431c-a55a-41dfbd0a7da4
+export VITE_PRIVY_APP_ID="${VITE_PRIVY_APP_ID:-cmvw5mrln007h0hldxdf3mps4}"
+export VITE_ALCHEMY_API_KEY="${VITE_ALCHEMY_API_KEY:-build-check-placeholder}"
+export VITE_ALCHEMY_POLICY_ID="${VITE_ALCHEMY_POLICY_ID:-b167bb59-2027-431c-a55a-41dfbd0a7da4}"
 
 step() {
   local name=$1; shift
