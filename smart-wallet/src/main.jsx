@@ -21,7 +21,10 @@ if (!config.appId || !config.apiKey || !config.policyId) {
       appId={config.appId}
       config={{
         // كل طريقة هنا يجب تفعيلها أيضاً في لوحة Privy.
-        loginMethods: ['email', 'sms', 'google', 'apple', 'twitter', 'github', 'discord'],
+        loginMethods: [
+          'email', 'sms', 'wallet', 'google', 'apple', 'twitter', 'github', 'discord',
+          'linkedin', 'spotify', 'instagram', 'tiktok', 'farcaster', 'telegram',
+        ],
         defaultChain: baseSepolia,
         supportedChains: [baseSepolia],
         embeddedWallets: { ethereum: { createOnLogin: 'all-users' }, showWalletUIs: false },

@@ -1,6 +1,6 @@
 # HGW Smart Wallet (نسخة تجريبية)
 
-دخول بالبريد أو الجوال (SMS) أو الحسابات الاجتماعية عبر Privy، واستيراد محفظة بمفتاح خاص، وحساب ذكي (EIP-7702) ورعاية غاز عبر Alchemy Wallet APIs على **Base Sepolia** فقط.
+دخول بالبريد أو الجوال (SMS) أو محفظة خارجية أو الحسابات الاجتماعية عبر Privy، واستيراد محفظة بمفتاح خاص، وحساب ذكي (EIP-7702) ورعاية غاز عبر Alchemy Wallet APIs على **Base Sepolia** فقط.
 
 ## التشغيل (يحتاج Node 22)
 
@@ -10,7 +10,7 @@
 
 ## إعدادات اللوحات
 
-- **Privy:** فعّل Email وSMS وGoogle وApple وTwitter وGitHub وDiscord (أو احذف من `src/main.jsx` ما لا تريده)، وأضف إلى Allowed origins: `http://localhost:5173` و `https://hgw-online.github.io`.
+- **Privy:** فعّل كل طريقة مذكورة في `loginMethods` (أو احذف من `src/main.jsx` ما لا تريده)، وأضف إلى Allowed origins: `http://localhost:5173` و `https://hgw-online.github.io`.
 - **Alchemy:** قائمة النطاقات تشمل `hgw-online.github.io`. للتجربة المحلية أضف `localhost` مؤقتاً وأزله بعد الانتهاء. تأكد أن Base Sepolia مفعلة.
 
 ## اختبار حقيقي
