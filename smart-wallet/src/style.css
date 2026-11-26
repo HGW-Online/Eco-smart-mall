@@ -9,8 +9,10 @@ h2 { margin: 0 0 10px; font-size: 1.1rem; }
 code { display: block; overflow-wrap: anywhere; text-align: left; color: #b9ced8; }
 .balance { font-size: 2rem; font-weight: 700; margin: 10px 0; text-align: right; }
 label { display: block; margin-bottom: 10px; }
-input, button { width: 100%; padding: 12px; border-radius: 10px; font: inherit; }
-input { background: #10212e; color: #fff; border: 1px solid #567; margin-top: 4px; }
+summary { cursor: pointer; }
+select { margin-bottom: 4px; }
+input, select, button { width: 100%; padding: 12px; border-radius: 10px; font: inherit; }
+input, select { background: #10212e; color: #fff; border: 1px solid #567; margin-top: 4px; }
 button { background: #007d70; color: #fff; border: 0; cursor: pointer; }
 button.secondary { background: #274456; }
 button:disabled { opacity: .5; cursor: default; }

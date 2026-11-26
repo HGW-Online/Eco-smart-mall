@@ -20,7 +20,8 @@ if (!config.appId || !config.apiKey || !config.policyId) {
     <PrivyProvider
       appId={config.appId}
       config={{
-        loginMethods: ['email'],
+        // كل طريقة هنا يجب تفعيلها أيضاً في لوحة Privy.
+        loginMethods: ['email', 'sms', 'google', 'apple', 'twitter', 'github', 'discord'],
         defaultChain: baseSepolia,
         supportedChains: [baseSepolia],
         embeddedWallets: { ethereum: { createOnLogin: 'all-users' }, showWalletUIs: false },

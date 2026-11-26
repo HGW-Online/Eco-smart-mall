@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { usePrivy, useWallets, toViemAccount } from '@privy-io/react-auth';
+import { usePrivy, useWallets, useImportWallet, toViemAccount } from '@privy-io/react-auth';
 import { createSmartWalletClient, alchemyWalletTransport } from '@alchemy/wallet-apis';
 import { baseSepolia } from 'viem/chains';
 import { checkTransfer, fromWei } from './logic.js';
@@ -11,8 +11,10 @@ const short = (a) => (a ? `${a.slice(0, 6)}…${a.slice(-4)}` : '—');
 export default function App({ config }) {
   const { ready, authenticated, login, logout, exportWallet } = usePrivy();
   const { wallets } = useWallets();
-  // المحفظة المضمنة فقط، وليس أي محفظة خارجية متصلة بالمتصفح.
-  const wallet = wallets.find((w) => w.walletClientType === 'privy');
+  const [selected, setSelected] = useState('');
+  // محافظ Privy فقط (المنشأة والمستوردة)، وليس المحافظ الخارجية المتصلة بالمتصفح.
+  const owned = wallets.filter((w) => w.walletClientType?.startsWith('privy'));
+  const wallet = owned.find((w) => w.address === selected) ?? owned[0];
 
   return (
     <main>
@@ -23,21 +25,73 @@ export default function App({ config }) {
       {!ready ? <p>جارٍ التحميل…</p>
         : !authenticated ? (
           <section>
-            <p>ادخل ببريدك الإلكتروني. تُنشأ محفظتك عند أول دخول.</p>
-            <button onClick={() => login()}>الدخول بالبريد</button>
+            <p>ادخل بالبريد أو الجوال أو أحد حساباتك الاجتماعية. تُنشأ محفظتك عند أول دخول.</p>
+            <button onClick={() => login()}>تسجيل الدخول</button>
           </section>
         ) : (
           <>
+            {owned.length > 1 && (
+              <label>المحفظة المعروضة
+                <select dir="ltr" value={wallet.address} onChange={(e) => setSelected(e.target.value)}>
+                  {owned.map((w) => <option key={w.address} value={w.address}>{short(w.address)}</option>)}
+                </select>
+              </label>
+            )}
             {wallet
               ? <Wallet key={wallet.address} wallet={wallet} config={config}
                   onExport={() => exportWallet({ address: wallet.address })} />
               : <p>جارٍ تجهيز المحفظة…</p>}
+            <ImportKey onImported={setSelected} />
             <button className="secondary" onClick={() => logout()}>تسجيل الخروج</button>
           </>
         )}
     </main>
   );
 }
+
+function ImportKey({ onImported }) {
+  const { importWallet } = useImportWallet();
+  const input = useRef(null);
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState('');
+
+  // المفتاح لا يُحفظ في حالة التطبيق ولا في المتصفح، ويُمسح الحقل فور قراءته.
+  async function submit(event) {
+    event.preventDefault();
+    const raw = input.current.value.trim();
+    input.current.value = '';
+    if (!/^(0x)?[0-9a-fA-F]{64}$/.test(raw)) { setNote('صيغة المفتاح غير صالحة'); return; }
+    setBusy(true); setNote('جارٍ الاستيراد…');
+    try {
+      const imported = await importWallet({ privateKey: raw });
+      onImported(imported.address);
+      setNote('تم استيراد المحفظة');
+    } catch {
+      // لا نطبع الخطأ حتى لا يظهر المفتاح في سجل المتصفح.
+      setNote('تعذر الاستيراد. قد تكون المحفظة مستوردة سابقاً أو الميزة غير متاحة لهذا التطبيق.');
+    } finally { setBusy(false); }
+  }
+
+  return (
+    <section>
+      <details>
+        <summary>استيراد محفظة بمفتاح خاص</summary>
+        <p role="note"><b>للتجربة: استخدم مفتاح محفظة تجريبية جديدة فقط.</b> لا تدخل مفتاحاً يحمي أموالاً حقيقية. عند أول إرسال من هنا يُفوَّض العنوان إلى حساب ذكي (EIP-7702) على هذه الشبكة.</p>
+        <form onSubmit={submit}>
+          <label>المفتاح الخاص<input ref={input} type="password" dir="ltr" autoComplete="off" spellCheck="false" /></label>
+          <button disabled={busy}>استيراد</button>
+        </form>
+        <p role="status">{note}</p>
+      </details>
+    </section>
+  );
+}
+
+// رقم العملية المعلقة ليس سراً، ونحفظه حتى يبقى منع التكرار بعد إعادة التحميل.
+const store = {
+  get: (k) => { try { return localStorage.getItem(k) ?? ''; } catch { return ''; } },
+  set: (k, v) => { try { v ? localStorage.setItem(k, v) : localStorage.removeItem(k); } catch { /* التخزين غير متاح */ } },
+};
 
 function Wallet({ wallet, config, onExport }) {
   const address = wallet.address;
@@ -50,7 +104,9 @@ function Wallet({ wallet, config, onExport }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
   const [txHash, setTxHash] = useState('');
-  const [pendingId, setPendingId] = useState('');
+  const pendingKey = `hgw-pending-${address}`;
+  const [pendingId, setPendingState] = useState(() => store.get(pendingKey));
+  const setPendingId = (id) => { store.set(pendingKey, id); setPendingState(id); };
   const sending = useRef(false);
 
   const refresh = useCallback(async () => {
