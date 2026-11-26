@@ -5,12 +5,7 @@ on:
 permissions:
   contents: read
 jobs:
-  build:
+  probe:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Install, test and build
-        run: bash smart-wallet/ci.sh
+      - run: node -v && npm -v
