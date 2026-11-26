@@ -2,10 +2,9 @@ name: Smart wallet build
 on:
   push:
     branches: ['claude/hgw-smart-wallet']
-permissions:
-  contents: read
 jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - run: node -v && npm -v
+      - uses: actions/checkout@v4
+      - run: echo ok
