@@ -16,3 +16,7 @@ jobs:
           node-version: '22'
       - name: Install, test and build
         run: bash smart-wallet/ci.sh
+      - name: Verify Pages packaging (no deployment)
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
+        with:
+          path: smart-wallet/dist

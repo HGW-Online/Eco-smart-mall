@@ -10,6 +10,15 @@ const { chromium } = require('playwright');
   await page.waitForTimeout(8000);
   const text = await page.innerText('body');
   console.log(text);
+  const button = page.getByRole('button', { name: 'تسجيل الدخول' });
+  if (await button.count()) {
+    await button.click();
+    await page.waitForTimeout(6000);
+    const dialog = (await page.innerText('body')).replace(text, '').replace(/\s+/g, ' ').trim();
+    console.log('::notice title=login dialog::' + (dialog.slice(0, 600) || 'nothing appeared'));
+  } else {
+    errors.push('login button did not appear');
+  }
   await browser.close();
   if (errors.length || !text.includes('HGW Smart Wallet')) {
     console.log('::error::' + (errors.join(' | ') || 'empty page').slice(0, 500));
